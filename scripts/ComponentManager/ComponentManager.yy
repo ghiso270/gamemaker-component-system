@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"Script1",
+  "%Name":"ComponentManager",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Script1",
+  "name":"ComponentManager",
   "parent":{
     "name":"Component system",
     "path":"Component system.yyp",

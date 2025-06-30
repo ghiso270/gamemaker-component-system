@@ -1,17 +1,17 @@
 /// @desc Constructor for a ComponentManager, needed for using Components inside a project
-/// @param {Asset.GMObject} obj		object inside which the components are managed
-/// @param {struct}			comps	initial components, structured like this: {health: new HealthComponent(...), input: ...}
+/// @arg {Id.Instance} obj		object inside which the components are managed
+/// @arg {struct}			comps	initial components, structured like this: {health: new HealthComponent(...), input: ...}
 
 function ComponentManager(obj, comps = {}) constructor {
 	
 	// array that holds every component
-	components = [];
+	all_components = [];
 	
-	// fields that make each component accessible by name, storing the index to access it from components[]
-	// (added dynamically)
+	// struct that make each component accessible by name, storing the index to access it from all_components[]
+	components = {}
 	
-	// 3-dimension array that makes each component accessible by event id, storing the index for components[] instead of the component itself
-	// note: the array is structured like this: array [event_type] [event_number] -> array of components (for that specific event)
+	// 3-dimension array that makes each component accessible by event id, storing the index for all_components[] instead of the component itself
+	// note: the array is structured like this: array [event_type] [event_number] -> array of component indexes (for that specific event)
 	event_components = [];
 	
 	execute = function(){
@@ -40,30 +40,30 @@ function ComponentManager(obj, comps = {}) constructor {
 	has_component = function(name){
 		
 		// check if the component reference is stored in a field
-		return struct_exists(self, name);
+		return struct_exists(components, name);
 	}
 	
 	get_component = function(name){
 		
 		// get index by name and use it to access the component
-		var index = struct_get(self, name);
+		var index = struct_get(components, name);
 		
 		if(index == undefined)
 			return undefined;
 			
-		return components[index];
+		return all_components[index];
 	}
 	
 	remove_component = function(name){
 		
-		// if the component doesn't exist, don't remove it
+		// if the component doesn't exist, returns
 		// note: not checking the references is correct, assuming the component has been added using the proper methods
-		var index = struct_get(self, name);
+		var index = struct_get(components, name);
 		if(index == undefined)
 			return;
 		
 		// delete the component's reference from each event array
-		var component = components[index];
+		var component = all_components[index];
 		var events_num = array_length(component.event_ids);
 		for (var i = 0; i < events_num; ++i) {
 			
@@ -78,11 +78,11 @@ function ComponentManager(obj, comps = {}) constructor {
 			array_delete(components_ids, index_in_event, 1);
 		}
 		
-		// delete the component's reference as field
-		struct_remove(self, name);
+		// delete the component's reference from the struct
+		struct_remove(components, name);
 		
 		// delete the component from the general array
-		array_delete(components, index, 1);
+		array_delete(all_components, index, 1);
 	}
 	
 	set_component = function(name, component){
@@ -91,21 +91,18 @@ function ComponentManager(obj, comps = {}) constructor {
 		component.set_manager(self);
 		
 		// if it already exists, update the value, otherwise add it
-		// note: this check handles correctly any value that might already be in another field, like the "object" field
-		var index = struct_get(self, name);
+		var index = struct_get(components, name);
 		if(index != undefined){
-			if(typeof(index) == "number")
-				components[index] = component;
-			
+			all_components[index] = component;
 			return;
 		}
 		
-		// add component as last element and get its index in the components[] array
-		array_push(components, component);
-		index = array_length(components)-1;
+		// add component as last element and get its index in the all_components[] array
+		array_push(all_components, component);
+		index = array_length(all_components)-1;
 		
 		// add the component's reference as a field
-		struct_set(self, name, index);
+		struct_set(components, name, index);
 		
 		// add the component's reference to the respective event array(s)
 		var events_num = array_length(component.event_ids);
@@ -116,18 +113,30 @@ function ComponentManager(obj, comps = {}) constructor {
 			var ev_type = event_id[0];
 			var ev_num  = event_id[1];
 			
-			// check if the event number map exists and create it if it doesn't
-			if(event_components[ev_type] == undefined)
+			// check if the event number array exists and create it if it doesn't
+			if(array_length(event_components) <= ev_type)
 				event_components[ev_type] = [];
 			
 			// same with the array of event components
-			if(event_components[ev_type][ev_num] == undefined)
+			if(array_length(event_components[ev_type]) <= ev_num)
 				event_components[ev_type][ev_num] = [];
 			
 			// add the reference to the array
 			var components_ids = event_components[ev_type][ev_num];
 			array_push(components_ids, index);
 		}
+	}
+	
+	destroy = function(){
+		var len = array_length(all_components);
+		for (var i = 0; i < len; ++i){
+			all_components[i].destroy();
+			all_components[i].set_manager(undefined);
+		}
+		
+		all_components = [];
+		components = {}
+		event_components = [];
 	}
 	
 	#endregion
