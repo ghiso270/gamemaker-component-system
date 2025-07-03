@@ -1,18 +1,32 @@
-/// @desc Constructor for an abstract subcomponent class, which provides additional functions usable by a component. Subclasses should be used instead
+/// @desc  Constructor for an abstract subcomponent class, which provides additional functions usable by a component. Subclasses should be used instead
+/// @param {String} class descriptive name of the subclass, eg InputSubcomponent -> class="input"	
 
-function Subcomponent() constructor{
+function Subcomponent(class) constructor{
 	
 	// custom methods should be added in subclasses
+	
+	#region initialize
+	
+	self.class = class;
+	
+	// assigned when attached to a component
+	self.parent = undefined;
+	self.id = undefined;
+	
+	#endregion
 	
 	#region utility methods
 	
 	/// @arg {Struct.Component} parent	component that will have access to this subcomponent
-	set_parent = function(parent){
+	/// @arg {Real}				id		identifier of this subcomponent
+	attach = function(parent, id){
 		self.parent = parent;
+		self.id = id;
 	}
 	
-	get_parent = function(){
-		return self.parent;
+	detach = function(){
+		self.parent = undefined;
+		self.id = undefined;
 	}
 	
 	#endregion
