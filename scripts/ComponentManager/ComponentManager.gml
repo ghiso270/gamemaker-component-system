@@ -4,7 +4,7 @@
 
 function ComponentManager(obj, components = []) constructor {
 	
-	execute = function(){
+	static execute = function(){
 		var components_to_execute = components_by_event[event_type][event_number];
 		var component_num = array_length(components_to_execute);
 		
@@ -12,57 +12,37 @@ function ComponentManager(obj, components = []) constructor {
 			components_to_execute[i].execute();
 	}
 	
-	#region initialize
-	
-	// array containing all components, indexed by ID
-	self.components = [];
-	
-	// map that matches a class name to an array of components of that class
-	self.components_by_class = {};
-	
-	// 3-dimension array that makes each component accessible by event id
-	// note: the array is structured like this: array [event_type] [event_number] -> array of components
-	self.components_by_event = [];
-	
-	self.object = obj;
-	
-	var len = array_length(components);
-	for (var i = 0; i < len; ++i)
-		add_component(components[i]);
-	
-	#endregion
-	
 	#region utility methods
 	
 	/// @arg {String} class	class to check
 	/// @returns {Bool}
-	has_component_class = function(class){
+	static has_component_class = function(class){
 		var class_array = struct_get(components_by_class, class);
 		return (class_array != undefined && array_length(class_array) > 0);
 	}
 	
 	/// @arg {Real} is	id of the component to check
 	/// @returns {Bool}
-	has_component = function(id){
+	static has_component = function(id){
 		return (array_length(components) > id);
 	}
 	
 	/// @desc returns the component with the specified ID. it is recommended to check has_component(id) beforehand
 	/// @arg {Real} id	id of the component to return
 	/// @returns {Struct.Component}
-	get_component = function(id){
+	static get_component = function(id){
 		return components[id];
 	}
 	
 	/// @arg {String} class	class of the component array to return
 	/// @returns {Array<Struct.Component>}
-	get_components_by_class = function(class){
+	static get_components_by_class = function(class){
 		return struct_get(components_by_class, class);
 	}
 	
 	
 	/// @arg {Real} id	id of the component to remove
-	remove_component = function(id){
+	static remove_component = function(id){
 		
 		// if the component doesn't exist, skip
 		if(!has_component(id))
@@ -91,7 +71,7 @@ function ComponentManager(obj, components = []) constructor {
 	}
 	
 	/// @arg {String} class		class of components to remove
-	remove_component_class = function(class){
+	static remove_component_class = function(class){
 		
 		// if the component doesn't exist, don't remove it
 		if(!has_component_class(class))
@@ -123,7 +103,7 @@ function ComponentManager(obj, components = []) constructor {
 	}
 	
 	/// @arg {Struct.Component} component		component to add
-	add_component = function(component){
+	static add_component = function(component){
 		
 		// add to the array
 		var new_id = array_length(components);
@@ -155,7 +135,7 @@ function ComponentManager(obj, components = []) constructor {
 		component.attach(self, new_id);
 	}
 	
-	destroy = function() {
+	static destroy = function() {
 		var len = array_length(components);
 		for (var i = 0; i < len; ++i)
 			components[i].destroy();
@@ -168,6 +148,26 @@ function ComponentManager(obj, components = []) constructor {
 		self.components_by_class = {};
 		self.components_by_event = [];
 	}
+	
+	#endregion
+	
+	#region initialize
+	
+	// array containing all components, indexed by ID
+	self.components = [];
+	
+	// map that matches a class name to an array of components of that class
+	self.components_by_class = {};
+	
+	// 3-dimension array that makes each component accessible by event id
+	// note: the array is structured like this: array [event_type] [event_number] -> array of components
+	self.components_by_event = [];
+	
+	self.object = obj;
+	
+	var len = array_length(components);
+	for (var i = 0; i < len; ++i)
+		add_component(components[i]);
 	
 	#endregion
 }

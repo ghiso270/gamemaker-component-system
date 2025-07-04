@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"Component",
   "parent":{
-    "name":"Component system",
-    "path":"Component system.yyp",
+    "name":"Components",
+    "path":"folders/Component System/Components.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -9,57 +9,36 @@ function Component(class, events, subcomponents = []) constructor {
 		// to implement in subclasses
 	}
 	
-	#region initialize
-	
-	self.class = class;
-	self.events = events;
-	
-	// assigned when attached to a manager
-	self.id = undefined;
-	self.manager = undefined;
-	
-	// map that matches a class name to an array of subcomponents of that class
-	self.subcomponents_by_class = {};
-	
-	// array containing all subcomponents, indexed by ID
-	self.subcomponents = [];
-	
-	var len = array_length(subcomponents);
-	for (var i = 0; i < len; ++i)
-		add_subcomponent(subcomponents[i]);
-	
-	#endregion
-	
 	#region utility methods
 	
 	/// @arg {String} class	class to check
 	/// @returns {Bool}
-	has_subcomponent_class = function(class){
+	static has_subcomponent_class = function(class){
 		var class_array = struct_get(subcomponents_by_class, class);
 		return (class_array != undefined && array_length(class_array) > 0);
 	}
 	
 	/// @arg {Real} is	id of the subcomponent to check
 	/// @returns {Bool}
-	has_subcomponent = function(id){
+	static has_subcomponent = function(id){
 		return (array_length(subcomponents) > id);
 	}
 	
-	/// @desc returns the subcomponent with the specified ID. it is recommended to check has_subcomponent(id) beforehand
+	/// @desc returns the subcomponent with the specified ID. it is recommended to check has_subcomponent() beforehand
 	/// @arg {Real} id	id of the subcomponent to return
 	/// @returns {Struct.Subcomponent}
-	get_subcomponent = function(id){
+	static get_subcomponent = function(id){
 		return subcomponents[id];
 	}
 	
-	/// @arg {String} class	class of the subcomponent array to return
+	/// @arg {String} class	class of the subcomponent array to return. it is recommended to check has_subcomponent_class() beforehand
 	/// @returns {Array<Struct.Subcomponent>}
-	get_subcomponents_by_class = function(class){
+	static get_subcomponents_by_class = function(class){
 		return struct_get(subcomponents_by_class, class);
 	}
 	
 	/// @arg {Real} id	id of the subcomponent to remove
-	remove_subcomponent = function(id){
+	static remove_subcomponent = function(id){
 		
 		// if the subcomponent doesn't exist,skip
 		if(!has_subcomponent(id))
@@ -77,7 +56,7 @@ function Component(class, events, subcomponents = []) constructor {
 	}
 	
 	/// @arg {String} class		class of subcomponents to remove
-	remove_subcomponent_class = function(class){
+	static remove_subcomponent_class = function(class){
 		
 		// if the subcomponent doesn't exist, don't remove it
 		if(!has_subcomponent_class(class))
@@ -94,7 +73,7 @@ function Component(class, events, subcomponents = []) constructor {
 	}
 	
 	/// @arg {Struct.Subcomponent} subcomponent		subcomponent to add
-	add_subcomponent = function(subcomponent){
+	static add_subcomponent = function(subcomponent){
 		
 		// add to the array
 		var new_id = array_length(subcomponents);
@@ -122,6 +101,23 @@ function Component(class, events, subcomponents = []) constructor {
 		self.manager = undefined;
 		self.id = undefined;
 	}
+	
+	#endregion
+	
+	#region initialize
+	
+	self.class = class;
+	self.events = events;
+	
+	// map that matches a class name to an array of subcomponents of that class
+	self.subcomponents_by_class = {};
+	
+	// array containing all subcomponents, indexed by ID
+	self.subcomponents = [];
+	
+	var len = array_length(subcomponents);
+	for (var i = 0; i < len; ++i)
+		add_subcomponent(subcomponents[i]);
 	
 	#endregion
 }

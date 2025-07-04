@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"Subcomponent",
+  "%Name":"MovementComponent",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Subcomponent",
+  "name":"MovementComponent",
   "parent":{
-    "name":"Subcomponents",
-    "path":"folders/Component System/Subcomponents.yy",
+    "name":"Components",
+    "path":"folders/Component System/Components.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

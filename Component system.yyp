@@ -11,6 +11,9 @@
   "defaultScriptType":1,
   "Folders":[
     {"$GMFolder":"","%Name":"Animation Curves","folderPath":"folders/Animation Curves.yy","name":"Animation Curves","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Component System","folderPath":"folders/Component System.yy","name":"Component System","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Components","folderPath":"folders/Component System/Components.yy","name":"Components","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Subcomponents","folderPath":"folders/Component System/Subcomponents.yy","name":"Subcomponents","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Extensions","folderPath":"folders/Extensions.yy","name":"Extensions","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Fonts","folderPath":"folders/Fonts.yy","name":"Fonts","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Notes","folderPath":"folders/Notes.yy","name":"Notes","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -40,6 +43,8 @@
     {"id":{"name":"Component","path":"scripts/Component/Component.yy",},},
     {"id":{"name":"ComponentManager","path":"scripts/ComponentManager/ComponentManager.yy",},},
     {"id":{"name":"current_event","path":"scripts/current_event/current_event.yy",},},
+    {"id":{"name":"MovementComponent","path":"scripts/MovementComponent/MovementComponent.yy",},},
+    {"id":{"name":"MovementInputSubcomponent","path":"scripts/MovementInputSubcomponent/MovementInputSubcomponent.yy",},},
     {"id":{"name":"Subcomponent","path":"scripts/Subcomponent/Subcomponent.yy",},},
   ],
   "resourceType":"GMProject",

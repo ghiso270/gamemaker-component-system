@@ -5,6 +5,22 @@ function Subcomponent(class) constructor{
 	
 	// custom methods should be added in subclasses
 	
+	#region utility methods
+	
+	/// @arg {Struct.Component} parent	component that will have access to this subcomponent
+	/// @arg {Real}				id		identifier of this subcomponent
+	static attach = function(parent, id){
+		self.parent = parent;
+		self.id = id;
+	}
+	
+	static detach = function(){
+		self.parent = undefined;
+		self.id = undefined;
+	}
+	
+	#endregion
+	
 	#region initialize
 	
 	self.class = class;
@@ -12,22 +28,6 @@ function Subcomponent(class) constructor{
 	// assigned when attached to a component
 	self.parent = undefined;
 	self.id = undefined;
-	
-	#endregion
-	
-	#region utility methods
-	
-	/// @arg {Struct.Component} parent	component that will have access to this subcomponent
-	/// @arg {Real}				id		identifier of this subcomponent
-	attach = function(parent, id){
-		self.parent = parent;
-		self.id = id;
-	}
-	
-	detach = function(){
-		self.parent = undefined;
-		self.id = undefined;
-	}
 	
 	#endregion
 }
