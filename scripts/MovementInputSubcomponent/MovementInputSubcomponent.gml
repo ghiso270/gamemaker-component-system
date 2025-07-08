@@ -1,10 +1,10 @@
 /// @desc subcomponent that gives input to a MovementComponent
-/// @param {any} up		input trigger (vk, ord or string) to go up. set to undefined to disable
-/// @param {any} down	input trigger (vk, ord or string) to go down. set to undefined to disable
-/// @param {any} left	input trigger (vk, ord or string) to go left. set to undefined to disable
-/// @param {any} right	input trigger (vk, ord or string) to go right. set to undefined to disable
+/// @param {Constant.VirtualKey,Real,String} up		input trigger (vk, ord or string) to go up. set to undefined to disable
+/// @param {Constant.VirtualKey,Real,String} left	input trigger (vk, ord or string) to go left. set to undefined to disable
+/// @param {Constant.VirtualKey,Real,String} down	input trigger (vk, ord or string) to go down. set to undefined to disable
+/// @param {Constant.VirtualKey,Real,String} right	input trigger (vk, ord or string) to go right. set to undefined to disable
 
-function MovementInputSubcomponent(up, down, left, right) : Subcomponent("move-input") constructor{
+function MovementInputSubcomponent(up, left, down, right) : Subcomponent() constructor{
 	
 	// format the variable correctly if it isn't already
 	self.up		= is_string(up)	   ? ord(up)    : up;
@@ -12,16 +12,26 @@ function MovementInputSubcomponent(up, down, left, right) : Subcomponent("move-i
 	self.left	= is_string(left)  ? ord(left)  : left;
 	self.right	= is_string(right) ? ord(right) : right;
 	
-	static check_up = function(){
+	// check for individual key
+	check_up = function(){
 		return (up!=undefined && keyboard_check(up));
 	}
-	static check_down = function(){
+	check_down = function(){
 		return (down!=undefined && keyboard_check(down));
 	}
-	static check_left = function(){
+	check_left = function(){
 		return (left!=undefined && keyboard_check(left));
 	}
-	static check_right = function(){
+	check_right = function(){
 		return (right!=undefined && keyboard_check(right));
+	}
+	
+	/// @desc get horizontal direction
+	get_hdir = function(){
+		return check_right() - check_left();
+	}
+	/// @desc get vertical direction
+	get_vdir = function(){
+		return check_down() - check_up();
 	}
 }

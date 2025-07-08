@@ -4,7 +4,13 @@
 
 function ComponentManager(obj, components = []) constructor {
 	
-	static execute = function(){
+	execute = function(){
+		if(array_length(components_by_event) < 1)
+			return;
+			
+		if(array_length(components_by_event[event_type]) < 1)
+			return;
+		
 		var components_to_execute = components_by_event[event_type][event_number];
 		var component_num = array_length(components_to_execute);
 		
@@ -16,33 +22,33 @@ function ComponentManager(obj, components = []) constructor {
 	
 	/// @arg {String} class	class to check
 	/// @returns {Bool}
-	static has_component_class = function(class){
+	has_component_class = function(class){
 		var class_array = struct_get(components_by_class, class);
 		return (class_array != undefined && array_length(class_array) > 0);
 	}
 	
 	/// @arg {Real} is	id of the component to check
 	/// @returns {Bool}
-	static has_component = function(id){
+	has_component = function(id){
 		return (array_length(components) > id);
 	}
 	
 	/// @desc returns the component with the specified ID. it is recommended to check has_component(id) beforehand
 	/// @arg {Real} id	id of the component to return
 	/// @returns {Struct.Component}
-	static get_component = function(id){
+	get_component = function(id){
 		return components[id];
 	}
 	
 	/// @arg {String} class	class of the component array to return
 	/// @returns {Array<Struct.Component>}
-	static get_components_by_class = function(class){
+	get_components_by_class = function(class){
 		return struct_get(components_by_class, class);
 	}
 	
 	
 	/// @arg {Real} id	id of the component to remove
-	static remove_component = function(id){
+	remove_component = function(id){
 		
 		// if the component doesn't exist, skip
 		if(!has_component(id))
@@ -71,7 +77,7 @@ function ComponentManager(obj, components = []) constructor {
 	}
 	
 	/// @arg {String} class		class of components to remove
-	static remove_component_class = function(class){
+	remove_component_class = function(class){
 		
 		// if the component doesn't exist, don't remove it
 		if(!has_component_class(class))
@@ -103,7 +109,7 @@ function ComponentManager(obj, components = []) constructor {
 	}
 	
 	/// @arg {Struct.Component} component		component to add
-	static add_component = function(component){
+	add_component = function(component){
 		
 		// add to the array
 		var new_id = array_length(components);
@@ -135,7 +141,7 @@ function ComponentManager(obj, components = []) constructor {
 		component.attach(self, new_id);
 	}
 	
-	static destroy = function() {
+	destroy = function() {
 		var len = array_length(components);
 		for (var i = 0; i < len; ++i)
 			components[i].destroy();
