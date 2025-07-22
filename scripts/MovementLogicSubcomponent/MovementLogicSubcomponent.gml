@@ -4,8 +4,8 @@
 
 function MovementLogicSubcomponent(get_dx, get_dy) : Subcomponent() constructor{
 	
-	self.get_dx = get_dx;
-	self.get_dy = get_dy;
+	self.get_dx = get_dy;
+	self.get_dy = get_dx;
 	
 	/// @desc retrieve the object from the ComponentManager
 	get_obj = function(){
