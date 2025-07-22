@@ -1,6 +1,6 @@
 {
   "$GMProject":"v1",
-  "%Name":"Component system",
+  "%Name":"gamemaker-component-system",
   "AudioGroups":[
     {"$GMAudioGroup":"","%Name":"audiogroup_default","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
   ],
@@ -36,18 +36,15 @@
   "MetaData":{
     "IDEVersion":"2024.13.1.193",
   },
-  "name":"Component system",
+  "name":"gamemaker-component-system",
   "resources":[
-    {"id":{"name":"Object1","path":"objects/Object1/Object1.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"id":{"name":"Component","path":"scripts/Component/Component.yy",},},
     {"id":{"name":"ComponentManager","path":"scripts/ComponentManager/ComponentManager.yy",},},
-    {"id":{"name":"current_event","path":"scripts/current_event/current_event.yy",},},
     {"id":{"name":"MovementComponent","path":"scripts/MovementComponent/MovementComponent.yy",},},
     {"id":{"name":"MovementInputSubcomponent","path":"scripts/MovementInputSubcomponent/MovementInputSubcomponent.yy",},},
     {"id":{"name":"MovementLogicSubcomponent","path":"scripts/MovementLogicSubcomponent/MovementLogicSubcomponent.yy",},},
     {"id":{"name":"Subcomponent","path":"scripts/Subcomponent/Subcomponent.yy",},},
-    {"id":{"name":"Sprite1","path":"sprites/Sprite1/Sprite1.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",

@@ -1,1 +1,0 @@
-#macro CURRENT_EVENT ([event_type, event_number])
