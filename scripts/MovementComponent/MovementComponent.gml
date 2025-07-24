@@ -7,15 +7,16 @@
 */
 
 /// @desc Component for basic linear movement, can be fine-tuned with a MovementLogicSubcomponent
+/// @arg {String}							name				name of the component
 /// @arg {Real}								x_spd				horizontal speed (in pixels), applied while receiving input
 /// @arg {Real}								y_spd				vertical speed (in pixels), applied while receiving input
 /// @arg {Struct.MovementInputSubcomponent}	input_src			subcomponent that handles the input
 /// @arg {Bool}								fix_diagonal		if true, it will move at the the same speed even diagonally. ignored when using a MovementLogicSubcomponent. defaults to true
 /// @arg {Bool}								ignore_game_speed	if true, it won't account for global.game_speed value. defaults to false
 /// @arg {Bool}								ignore_pause		if true, it will move even when the game is paused. defaults to false
-/// @arg {Array<Array<Real>>}				events				list of events in which the component has to be executed, eg: [[ev1_type, ev1_number], [ev2_type, ev2_number], ...]
+/// @arg {Array<Array<Real>>}				events				list of events in which the component has to be executed. defaults to [[ev_step, ev_step_normal]]
 
-function MovementComponent(x_spd, y_spd, input_src, fix_diagonal = true, ignore_game_speed = false, ignore_pause = false, events = [[ev_step, ev_step_normal]]) : Component("movement", events) constructor{
+function MovementComponent(name, x_spd, y_spd, input_src, fix_diagonal = true, ignore_game_speed = false, ignore_pause = false, events = [[ev_step, ev_step_normal]]) : Component(name, events) constructor{
 	
 	/// @desc calculates instant velocity and applies it
 	execute = function(){

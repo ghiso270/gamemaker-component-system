@@ -15,130 +15,84 @@ function ComponentManager(obj, components = []) constructor {
 		var component_num = array_length(components_to_execute);
 		
 		for (var i = 0; i < component_num; ++i)
-			components_to_execute[i].execute();
+				components_to_execute[i].execute();
 	}
 	
 	#region utility methods
 	
-	/// @arg {String} class	class to check
+	/// @arg {String} name	name of the component to check
 	/// @returns {Bool}
-	has_component_class = function(class){
-		var class_array = struct_get(components_by_class, class);
-		return (class_array != undefined && array_length(class_array) > 0);
+	has_component = function(name){
+		return struct_exists(components_by_name, name);
 	}
 	
-	/// @arg {Real} is	id of the component to check
-	/// @returns {Bool}
-	has_component = function(id){
-		return (array_length(components) > id);
-	}
-	
-	/// @desc returns the component with the specified ID. it is recommended to check has_component(id) beforehand
-	/// @arg {Real} id	id of the component to return
-	/// @returns {Struct.Component}
-	get_component = function(id){
-		return components[id];
-	}
-	
-	/// @arg {String} class	class of the component array to return
+	/// @arg {String} name	name of the component to return
 	/// @returns {Array<Struct.Component>}
-	get_components_by_class = function(class){
-		return struct_get(components_by_class, class);
+	get_component = function(name){
+		return struct_get(components_by_name, name);
 	}
 	
-	
-	/// @arg {Real} id	id of the component to remove
-	remove_component = function(id){
-		
-		// if the component doesn't exist, skip
-		if(!has_component(id))
+	/// @arg {String} name		name of the component to remove
+	remove_component = function(name){
+		// if the component doesn't exist, don't remove it
+		if(!has_component(name)){
+			show_debug_message($"WARNING: The name \"{name}\" doesn't exist");
 			return;
-			
-		var comp = get_component(id);
+		}
 		
-		// delete the component from the general array
-		array_delete(components, id, 1);
+		var comp = get_component(name);
 		
-		// delete the component from the class map
-		var class_array = struct_get(components_by_class, comp.class);
-		var class_index = array_get_index(class_array, comp);
-		array_delete(class_array, class_index, 1);
+		// delete from the general array
+		var idx = array_get_index(components, comp);
+		array_delete(components, idx, 1);
 		
-		// delete the component from the event array
+		// delete from the event array
 		var events_num = array_length(comp.events);
 		for (var i = 0; i < events_num; ++i) {
 			
 			// find the correct index to delete the component
 			var ev_id = comp.events[i];
 			var event_array = components_by_event[ev_id[0], ev_id[1]];
-		    var event_idx = array_get_index(event_array, comp);
+			var event_idx = array_get_index(event_array, comp);
+			
 			array_delete(event_array, event_idx, 1);
 		}
-	}
-	
-	/// @arg {String} class		class of components to remove
-	remove_component_class = function(class){
 		
-		// if the component doesn't exist, don't remove it
-		if(!has_component_class(class))
-			return;
-		
-		// remove each component from the general array and the event array
-		var class_array = struct_get(components_by_class, class);
-		var len = array_length(class_array);
-		for (var i = 0; i < len; ++i){
-			
-			// delete from the general array
-			var comp = class_array[i];
-			array_delete(components, comp.id, 1);
-		
-			// delete from the event array
-			var events_num = array_length(comp.events);
-			for (var j = 0; j < events_num; ++j) {
-			
-				// find the correct index to delete the component
-				var ev_id = comp.events[j];
-				var event_array = components_by_event[ev_id[0], ev_id[1]];
-			    var event_idx = array_get_index(event_array, comp);
-				array_delete(event_array, event_idx, 1);
-			}
-		}
-		
-		// delete the class itself, the garbage collector handles the rest
-		struct_remove(components_by_class, class);
+		// delete from the name map
+		struct_remove(components_by_name, name);
 	}
 	
 	/// @arg {Struct.Component} component		component to add
 	add_component = function(component){
+		if(has_component(component.name)){
+			show_debug_message($"WARNING: The name \"{component.name}\" already exists");
+			return;
+		}
 		
-		// add to the array
-		var new_id = array_length(components);
-		components[new_id] = component;
+		// add to general array
+		array_push(components, component);
 		
-		// add to the class map
-		var class_array = struct_get(components_by_class, component.class);
-		if(class_array == undefined)
-			struct_set(components_by_class, component.class, [component]);
-		else
-			array_push(class_array, component);
+		// add to name map
+		struct_set(components_by_name, component.name, component);
 		
-		// add to the event array
+		// add to event array
 		var events_num = array_length(component.events);
-		for (var j = 0; j < events_num; ++j) {
-			var ev_id = component.events[j];
-			// check if the event number array exists and create it if it doesn't
+		for (var i = 0; i < events_num; ++i) {
+			var ev_id = component.events[i];
+			
+			// create the event number array if it doesn't exist already
 			if(array_length(components_by_event) <= ev_id[0])
 				components_by_event[ev_id[0]] = [];
 			
-			// same with the array of event components
+			// create the event components array if it doesn't exist already
 			if(array_length(components_by_event[ev_id[0]]) <= ev_id[1])
 				components_by_event[ev_id[0], ev_id[1]] = [];
-				
+			
 			array_push(components_by_event[ev_id[0], ev_id[1]], component);
 		}
-		
+
 		// attach the component
-		component.attach(self, new_id);
+		component.attach(self);
 	}
 	
 	destroy = function() {
@@ -146,12 +100,12 @@ function ComponentManager(obj, components = []) constructor {
 		for (var i = 0; i < len; ++i)
 			components[i].destroy();
 		
-		// separate detachment to allow communication in destroy() function
+		// separate detachment to allow communication during destroy() function
 		for (var i = 0; i < len; ++i)
 			components[i].detach();
 		
 		self.components = [];
-		self.components_by_class = {};
+		self.components_by_name = {};
 		self.components_by_event = [];
 	}
 	
@@ -162,8 +116,8 @@ function ComponentManager(obj, components = []) constructor {
 	// array containing all components, indexed by ID
 	self.components = [];
 	
-	// map that matches a class name to an array of components of that class
-	self.components_by_class = {};
+	// map that matches a name to a component
+	self.components_by_name = {};
 	
 	// 3-dimension array that makes each component accessible by event id
 	// note: the array is structured like this: array [event_type] [event_number] -> array of components
@@ -171,9 +125,12 @@ function ComponentManager(obj, components = []) constructor {
 	
 	self.object = obj;
 	
-	var len = array_length(components);
+	// add each component
+	array_foreach(components, function(val, idx){add_component(val)});
+	/*
+	var len = array_length();
 	for (var i = 0; i < len; ++i)
 		add_component(components[i]);
-	
+	*/
 	#endregion
 }
