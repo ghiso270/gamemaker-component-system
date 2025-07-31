@@ -4,25 +4,25 @@
 
 function Component(name, events) constructor {
 	
-	execute = function(){
+	static execute = function(){
 		// to implement in subclasses
 	}
-	destroy = function(){
+	static destroy = function(){
 		// to implement in subclasses
 	}
 	
 	#region utility methods
 	
 	/// @arg {Struct.ComponentManager}	manager		manager this component is being added to
-	attach = function(manager){
+	static attach = function(manager){
 		self.manager = manager;
 	}
 	
-	detach = function(){
+	static detach = function(){
 		self.manager = undefined;
 	}
 	
-	activate = function(){
+	static activate = function(){
 		
 		// exit if already active
 		if(is_active) return;
@@ -31,7 +31,7 @@ function Component(name, events) constructor {
 		execute = deactivated_execute;
 	}
 	
-	deactivate = function(){
+	static deactivate = function(){
 		
 		// exit if already inactive
 		if(!is_active) return;

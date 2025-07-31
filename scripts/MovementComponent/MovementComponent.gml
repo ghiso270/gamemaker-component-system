@@ -19,7 +19,7 @@
 function MovementComponent(name, x_spd, y_spd, input_src, fix_diagonal = true, ignore_game_speed = false, ignore_pause = false, events = [[ev_step, ev_step_normal]]) : Component(name, events) constructor{
 	
 	/// @desc calculates instant velocity and applies it
-	execute = function(){
+	static execute = function(){
 		
 		// if missing input source or if the game is paused, abort
 		if(input == undefined || (global.game_pause && !ignore_pause))
@@ -50,13 +50,13 @@ function MovementComponent(name, x_spd, y_spd, input_src, fix_diagonal = true, i
 	}
 	
 	/// @desc updates x and y values of the GM Object
-	update_pos = function(){
+	static update_pos = function(){
 		manager.object.x += dx * get_dt();
 		manager.object.y += dy * get_dt();
 	}
 	
 	/// @arg {Struct.MovementInputSubcomponent}	input_src		subcomponent that handles the input
-	set_input_src = function(input_src){
+	static set_input_src = function(input_src){
 		self.input = input_src;
 		
 		if(input_src == undefined)
@@ -66,7 +66,7 @@ function MovementComponent(name, x_spd, y_spd, input_src, fix_diagonal = true, i
 	}
 	
 	/// @arg {Struct.MovementLogicSubcomponent,undefined}	move_logic_src		subcomponent that handles custom movement (such as moving as a sine wave, following an object ecc.)
-	set_move_logic_src = function(move_logic_src){
+	static set_move_logic_src = function(move_logic_src){
 		self.move_logic = move_logic_src;
 		
 		if(move_logic_src == undefined)
@@ -76,7 +76,7 @@ function MovementComponent(name, x_spd, y_spd, input_src, fix_diagonal = true, i
 	}
 	
 	/// @desc returns a variable that works as delta_time/1_000_000, but can take into account other variables, such as game_speed
-	get_dt = function(){
+	static get_dt = function(){
 		if(!ignore_pause && global.game_pause)
 			return 0;
 		

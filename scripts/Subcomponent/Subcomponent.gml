@@ -8,12 +8,12 @@ function Subcomponent() constructor{
 	
 	/// @desc should be called when adding to a component
 	/// @arg {Struct.Component} parent	component that will have access to this subcomponent
-	attach = function(parent){
+	static attach = function(parent){
 		self.parent = parent;
 	}
 	
 	/// @desc should be called when removing from a component
-	detach = function(){
+	static detach = function(){
 		self.parent = undefined;
 	}
 	

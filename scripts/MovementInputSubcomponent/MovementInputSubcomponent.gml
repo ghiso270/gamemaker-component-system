@@ -13,29 +13,29 @@ function MovementInputSubcomponent(up, left, down, right) : Subcomponent() const
 	self.right	= is_string(right) ? ord(right) : right;
 	
 	// check for keys held down
-	check_up = function(){return (up!=undefined && keyboard_check(up))}
-	check_down = function(){return (down!=undefined && keyboard_check(down))}
-	check_left = function(){return (left!=undefined && keyboard_check(left))}
-	check_right = function(){return (right!=undefined && keyboard_check(right))}
+	static check_up = function(){return (up!=undefined && keyboard_check(up))}
+	static check_down = function(){return (down!=undefined && keyboard_check(down))}
+	static check_left = function(){return (left!=undefined && keyboard_check(left))}
+	static check_right = function(){return (right!=undefined && keyboard_check(right))}
 	
 	// check for keys pressed
-	press_up = function(){return (up!=undefined && keyboard_check_pressed(up))}
-	press_down = function(){return (down!=undefined && keyboard_check_pressed(down))}
-	press_left = function(){return (left!=undefined && keyboard_check_pressed(left))}
-	press_right = function(){return (right!=undefined && keyboard_check_pressed(right))}
+	static press_up = function(){return (up!=undefined && keyboard_check_pressed(up))}
+	static press_down = function(){return (down!=undefined && keyboard_check_pressed(down))}
+	static press_left = function(){return (left!=undefined && keyboard_check_pressed(left))}
+	static press_right = function(){return (right!=undefined && keyboard_check_pressed(right))}
 	
 	// check for keys held down
-	release_up = function(){return (up!=undefined && keyboard_check_released(up))}
-	release_down = function(){return (down!=undefined && keyboard_check_released(down))}
-	release_left = function(){return (left!=undefined && keyboard_check_released(left))}
-	release_right = function(){return (right!=undefined && keyboard_check_released(right))}
+	static release_up = function(){return (up!=undefined && keyboard_check_released(up))}
+	static release_down = function(){return (down!=undefined && keyboard_check_released(down))}
+	static release_left = function(){return (left!=undefined && keyboard_check_released(left))}
+	static release_right = function(){return (right!=undefined && keyboard_check_released(right))}
 	
 	/// @desc get horizontal direction
-	get_hdir = function(){
+	static get_hdir = function(){
 		return check_right() - check_left();
 	}
 	/// @desc get vertical direction
-	get_vdir = function(){
+	static get_vdir = function(){
 		return check_down() - check_up();
 	}
 }
