@@ -5,6 +5,9 @@
 function ComponentManager(obj, components = []) constructor {
 	
 	static execute = function(){
+		if(is_paused)
+			return;
+		
 		if(array_length(components_by_event) < 1)
 			return;
 		
@@ -64,10 +67,11 @@ function ComponentManager(obj, components = []) constructor {
 		// delete from the name map
 		struct_remove(components_by_name, name);
 		
-		// detach and optionally destroy the component
-		comp.detach();
+		// detachement should happen after, to access the manager during destroy() method
 		if(to_destroy)
 			comp.destroy();
+		
+		comp.detach();
 	}
 	
 	/// @arg {Struct.Component} component		component to add
@@ -108,13 +112,67 @@ function ComponentManager(obj, components = []) constructor {
 		for (var i = 0; i < len; ++i)
 			components[i].destroy();
 		
-		// separate detachment to allow communication during destroy() function
+		// separate detachment to allow communication during destroy() method
 		for (var i = 0; i < len; ++i)
 			components[i].detach();
 		
 		self.components = [];
 		self.components_by_name = {};
 		self.components_by_event = [];
+	}
+	
+	static pause = function() {
+		is_paused = true;
+	}
+	static resume = function() {
+		is_paused = false;
+	}
+	
+	/// @arg {Bool}		active_only			If true, inactive components will be hidden. Defaults to false
+	/// @arg {Function} expand_criteria		Function called for each component - takes 1 argument (component) and returns a bool (true: show 1-line JSON, false: only show the name). By default only show names
+	/// @arg {Bool}		hide_substructs		If true, structs inside components (like subcomponents) will be hidden (manager is always hidden). Defaults to false
+	/// @return {String}
+	static list_components = function(active_only = false, expand_criteria = function(component){return false}, hide_substructs = false) {
+		var out = "";
+		
+		var len = array_length(components);
+		var len_digits = string_length(string(len));
+		
+		var comp_num = 1;
+		
+		var json_filter;
+		if(hide_substructs)
+			json_filter = function(key, val){
+				if(is_struct(val) && key != "")
+					return "...";
+			
+				return val;
+			}
+		else
+			json_filter = function(key, val){
+				if(key == "manager")
+					return "...";
+			
+				return val;
+			}
+		
+		for (var i = 0; i < len; ++i) {
+			
+			// skip inactives
+			if(active_only && !components[i].is_active)
+				continue;
+			
+			// write ordinal number with padding
+			var ordinal = string(comp_num++);
+		    out += string_repeat(" ", len_digits - string_length(ordinal)) + ordinal + " - ";
+			
+			// write component (json or name)
+			
+			out += expand_criteria(components[i]) ? json_stringify(components[i], false, json_filter) : components[i].name;
+			out += "\n";
+		}
+		
+		return out;
 	}
 	
 	#endregion
@@ -132,6 +190,8 @@ function ComponentManager(obj, components = []) constructor {
 	self.components_by_event = [];
 	
 	self.object = obj;
+	
+	self.is_paused = false;
 	
 	// add each component
 	array_foreach(components, function(val, idx){add_component(val)});

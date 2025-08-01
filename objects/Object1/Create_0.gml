@@ -7,4 +7,3 @@ m3 = new DummyComponent("3")
 
 man = new ComponentManager(self, [m1,m2,m3]);
 man.execute();
-

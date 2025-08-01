@@ -1,11 +1,7 @@
 man.execute();
 
 if(keyboard_check_pressed(vk_space)){
-	show_debug_message(json_stringify(man, false, function(k,v){
-		if(is_struct(v) && struct_exists(v, "name")){
-			return v.name;
-		}else return v;
-	}));
+	show_debug_message(man.list_components(true, function(component){return true}, true));
 }
 
 if(keyboard_check_pressed(ord("1")))
@@ -22,4 +18,3 @@ if(keyboard_check_pressed(ord("X")))
 	m2.activate();
 if(keyboard_check_pressed(ord("C")))
 	m3.activate();
-
