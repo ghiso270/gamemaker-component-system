@@ -189,6 +189,7 @@ function ComponentManager(obj, components = []) constructor {
 		
 		self.components = [];
 		self.components_by_name = {};
+		self.components_by_tag = {};
 		self.components_by_event = [];
 	}
 	
@@ -259,12 +260,12 @@ function ComponentManager(obj, components = []) constructor {
 	// map that matches a name to a component
 	self.components_by_name = {};
 	
+	// map that matches a tag to an array of components
+	self.components_by_tag = {};
+	
 	// similar to a 3-dimension array that makes each component accessible by event id.
 	// structured like this: array [event_type] -> struct[$ event_number] -> array of components
 	self.components_by_event = [];
-	
-	// map that matches a tag to an array of components
-	self.components_by_tag = {};
 	
 	self.object = obj;
 	
