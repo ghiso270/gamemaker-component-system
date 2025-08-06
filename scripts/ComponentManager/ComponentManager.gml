@@ -156,6 +156,26 @@ function ComponentManager(obj, components = []) constructor {
 	static tag_get_components = function(tag){
 		return components_by_tag[$ tag];
 	}
+		
+	/// @desc removes all the components (in this manager) that share the specified tag.
+	/// @arg {String} tag	tag of the components to remove
+	/// @arg {Bool} to_destroy	if set to true, the destroy method of the component will be performed. defaults to true
+	/// @arg {Bool} remove_tag	if set to true, the tag itself will be removed from the map (instead of just leaving an empty array). defaults to false
+	static tag_remove_components = function(tag, to_destroy = true, remove_tag = false){
+		
+		if(remove_tag)
+			struct_remove(components_by_tag, tag);
+		
+		// get the array of components
+		var comps = components_by_tag[$ tag];
+		if(is_undefined(comps))
+			return;
+		
+		// loop through all the components to delete them
+		var len = array_length(comps);
+		for (var i = 0; i < len; ++i)
+		    remove_component(comps[i], to_destroy);
+	}
 	
 	/// @desc terminates this manager, clearing its memory and destroying all of its components
 	static destroy = function() {
