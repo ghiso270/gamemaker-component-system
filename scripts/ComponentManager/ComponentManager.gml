@@ -143,6 +143,13 @@ function ComponentManager(obj, components = []) constructor {
 		component.attach(self);
 	}
 	
+	/// @desc returns the number of components (in this manager) that share the specified tag
+	/// @arg {String} tag	tag to get the count of
+	/// @returns {Real}
+	static tag_count = function(tag){
+		return array_length(components_by_tag[$ tag]);
+	}
+	
 	/// @desc terminates this manager, clearing its memory and destroying all of its components
 	static destroy = function() {
 		var len = array_length(components);
