@@ -1,6 +1,5 @@
 # gamemaker-component-system
 project for GMS2 that includes all the necessary structs and functions to use a component-based approach.
-Below are the links to the documentation (also accessible from the "documentation" folder):
 
-- [ComponentManager](documentation/ComponentManager.md)
-- [Component](documentation/Component.md)
+> Note that this is still a work in progress.<br>
+> The version will be bumped to v1.0.0 as soon as it becomes stable.

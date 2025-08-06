@@ -6,13 +6,13 @@ function Subcomponent() constructor{
 	
 	#region utility methods
 	
-	/// @desc should be called when adding to a component
+	/// @desc sets the parent of this subcomponent to the specified one
 	/// @arg {Struct.Component} parent	component that will have access to this subcomponent
 	static attach = function(parent){
 		self.parent = parent;
 	}
 	
-	/// @desc should be called when removing from a component
+	/// @desc removes this subcomponent's reference to its parent
 	static detach = function(){
 		self.parent = undefined;
 	}

@@ -24,7 +24,7 @@ function MovementInputSubcomponent(up, left, down, right) : Subcomponent() const
 	static press_left = function(){return (left!=undefined && keyboard_check_pressed(left))}
 	static press_right = function(){return (right!=undefined && keyboard_check_pressed(right))}
 	
-	// check for keys held down
+	// check for keys released
 	static release_up = function(){return (up!=undefined && keyboard_check_released(up))}
 	static release_down = function(){return (down!=undefined && keyboard_check_released(down))}
 	static release_left = function(){return (left!=undefined && keyboard_check_released(left))}

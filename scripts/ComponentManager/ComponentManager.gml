@@ -4,6 +4,7 @@
 
 function ComponentManager(obj, components = []) constructor {
 	
+	/// @desc executes all the necessary components for the current event
 	static execute = function(){
 		if(is_paused)
 			return;
@@ -25,18 +26,21 @@ function ComponentManager(obj, components = []) constructor {
 	
 	#region utility methods
 	
+	/// @desc returns whether or not a component with the specified name exists inside this manager
 	/// @arg {String} name	name of the component to check
 	/// @returns {Bool}
 	static has_component = function(name){
 		return struct_exists(components_by_name, name);
 	}
 	
+	/// @desc returns the specified component
 	/// @arg {String} name	name of the component to return
-	/// @returns {Array<Struct.Component>}
+	/// @returns {Struct.Component}
 	static get_component = function(name){
 		return struct_get(components_by_name, name);
 	}
 	
+	/// @desc removes the specified component from memory, optionally destroying it
 	/// @arg {String} name		name of the component to remove
 	/// @arg {Bool} to_destroy	if set to true, the destroy method of the component will be performed. defaults to true
 	static remove_component = function(name, to_destroy = true){
@@ -74,6 +78,7 @@ function ComponentManager(obj, components = []) constructor {
 		comp.detach();
 	}
 	
+	/// @desc adds the specified component to memory, for execution and management
 	/// @arg {Struct.Component} component		component to add
 	static add_component = function(component){
 		if(has_component(component.name)){
@@ -107,6 +112,7 @@ function ComponentManager(obj, components = []) constructor {
 		component.attach(self);
 	}
 	
+	/// @desc terminates this manager, clearing its memory and destroying all of its components
 	static destroy = function() {
 		var len = array_length(components);
 		for (var i = 0; i < len; ++i)
@@ -121,13 +127,17 @@ function ComponentManager(obj, components = []) constructor {
 		self.components_by_event = [];
 	}
 	
+	/// @desc pauses this manager, meaning the execute method will skip (starting from the next execution)
 	static pause = function() {
 		is_paused = true;
 	}
+	
+	/// @desc resumes this manager, meaning the execute method will run normally until paused again
 	static resume = function() {
 		is_paused = false;
 	}
 	
+	/// @desc returns a multi-line string containing the components in this manager, each line structured as "N - Component", N starting from 1
 	/// @arg {Bool}		active_only			If true, inactive components will be hidden. Defaults to false
 	/// @arg {Function} expand_criteria		Function called for each component - takes 1 argument (component) and returns a bool (true: show 1-line JSON, false: only show the name). By default only show names
 	/// @arg {Bool}		hide_substructs		If true, structs inside components (like subcomponents) will be hidden (manager is always hidden). Defaults to false
@@ -167,7 +177,6 @@ function ComponentManager(obj, components = []) constructor {
 		    out += string_repeat(" ", len_digits - string_length(ordinal)) + ordinal + " - ";
 			
 			// write component (json or name)
-			
 			out += expand_criteria(components[i]) ? json_stringify(components[i], false, json_filter) : components[i].name;
 			out += "\n";
 		}
@@ -195,10 +204,6 @@ function ComponentManager(obj, components = []) constructor {
 	
 	// add each component
 	array_foreach(components, function(val, idx){add_component(val)});
-	/*
-	var len = array_length();
-	for (var i = 0; i < len; ++i)
-		add_component(components[i]);
-	*/
+
 	#endregion
 }
