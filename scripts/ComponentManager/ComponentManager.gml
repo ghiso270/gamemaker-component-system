@@ -4,24 +4,26 @@
 
 function ComponentManager(obj, components = []) constructor {
 	
-	/// @desc executes all the necessary components for the current event
-	static execute = function(){
+	/// @desc executes all the necessary components for the current (or the specified) event
+	/// @arg {Constant.EventType}	ev_type		type of event to perform. defaults to the current one
+	/// @arg {Constant.EventNumber} ev_num		the specific event constant or value. defaults to the current one
+	static execute = function(ev_type = event_type, ev_num = event_number){
 		if(is_paused)
 			return;
 		
 		if(array_length(components_by_event) < 1)
 			return;
 		
-		var components_by_type = components_by_event[event_type];
+		var components_by_type = components_by_event[ev_type];
 		if(is_undefined(components_by_type))
 			return;
 		
 		// if the resulting array is undefined, the length will be 0, skipping the loop
-		var components_to_execute = components_by_type[$ event_number];
+		var components_to_execute = components_by_type[$ ev_num];
 		var component_num = array_length(components_to_execute);
 		
 		for (var i = 0; i < component_num; ++i)
-				components_to_execute[i].execute();
+				components_to_execute[i].execute(ev_type, ev_num);
 	}
 	
 	#region utility methods

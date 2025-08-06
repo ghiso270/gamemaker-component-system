@@ -19,7 +19,9 @@
 function MovementComponent(name, x_spd, y_spd, input_src, fix_diagonal = true, ignore_game_speed = false, ignore_pause = false, events = [[ev_step, ev_step_normal]]) : Component(name, events) constructor{
 	
 	/// @desc calculates and applies instant velocity
-	static execute = function(){
+	/// @arg {Constant.EventType}	ev_type		type of the event in execution
+	/// @arg {Constant.EventNumber} ev_num		number of the event in execution
+	static execute = function(ev_type, ev_num){
 		
 		// if missing input source or if the game is paused, abort
 		if(input == undefined || (global.game_pause && !ignore_pause))
