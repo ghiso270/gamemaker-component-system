@@ -1,8 +1,9 @@
 /// @desc an abstract component class. Subclasses should be used instead, implementing the "execute" method and optionally subcomponents
-/// @arg {String}						name				name of the component		
+/// @arg {String}						name				name of the component
+/// @arg {Array<String>}				tags				tags of the component
 /// @arg {Array<Array<Real>>}			events				list of events in which the component has to be executed, eg: [[ev1_type, ev1_number], [ev2_type, ev2_number], ...]
 
-function Component(name, events) constructor {
+function Component(name, tags, events) constructor {
 	
 	/// @arg {Constant.EventType}	ev_type		type of the event in execution
 	/// @arg {Constant.EventNumber} ev_num		number of the event in execution
@@ -52,8 +53,10 @@ function Component(name, events) constructor {
 	#endregion
 	
 	#region initialize
+	
 	self.is_active = true;
 	self.name = name;
+	self.tags = tags;
 	self.events = events;
 	
 	#endregion

@@ -78,6 +78,21 @@ function ComponentManager(obj, components = []) constructor {
 			comp.destroy();
 		
 		comp.detach();
+		
+		// finally, loop through all the tags to remove the item from
+		var tags = comp.tags;
+		var tags_num = array_length(tags);
+		for(var i = 0; i < tags_num; ++i){
+			
+			// get the array of components with the specified tag
+			var tag_comp_arr = components_by_tag[$ tags[i]];
+			if(is_undefined(tag_comp_arr))
+				continue;
+			
+			// if the array is found, add the component to it
+			var event_idx = array_get_index(tag_comp_arr, comp);
+			array_delete(tag_comp_arr, event_idx, 1);
+		}
 	}
 	
 	/// @desc adds the specified component to memory, for execution and management
@@ -86,6 +101,20 @@ function ComponentManager(obj, components = []) constructor {
 		if(has_component(component.name)){
 			show_debug_message($"WARNING: The name \"{component.name}\" already exists");
 			return;
+		}
+		
+		// loop through all the tags
+		var tags = component.tags;
+		var tags_num = array_length(tags);
+		for(var i = 0; i < tags_num; ++i){
+			
+			// get the array of components with the specified tag
+			var tag_comp_arr = components_by_tag[$ tags[i]];
+			if(is_undefined(tag_comp_arr))
+				continue;
+			
+			// if the array is found, add the component to it
+			array_push(tag_comp_arr, component);
 		}
 		
 		// add to general array
@@ -199,6 +228,9 @@ function ComponentManager(obj, components = []) constructor {
 	// similar to a 3-dimension array that makes each component accessible by event id.
 	// structured like this: array [event_type] -> struct[$ event_number] -> array of components
 	self.components_by_event = [];
+	
+	// map that matches a tag to an array of components
+	self.components_by_tag = {};
 	
 	self.object = obj;
 	

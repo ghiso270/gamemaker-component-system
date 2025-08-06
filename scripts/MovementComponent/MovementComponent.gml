@@ -8,6 +8,7 @@
 
 /// @desc Component for basic linear movement, can be fine-tuned with a MovementLogicSubcomponent
 /// @arg {String}							name				name of the component
+/// @arg {Array<String>}					tags				tags of the component
 /// @arg {Real}								x_spd				horizontal speed (in pixels), applied while receiving input
 /// @arg {Real}								y_spd				vertical speed (in pixels), applied while receiving input
 /// @arg {Struct.MovementInputSubcomponent}	input_src			subcomponent that handles the input
@@ -16,7 +17,7 @@
 /// @arg {Bool}								ignore_pause		if true, it will move even when the game is paused. defaults to false
 /// @arg {Array<Array<Real>>}				events				list of events in which the component has to be executed. defaults to [[ev_step, ev_step_normal]]
 
-function MovementComponent(name, x_spd, y_spd, input_src, fix_diagonal = true, ignore_game_speed = false, ignore_pause = false, events = [[ev_step, ev_step_normal]]) : Component(name, events) constructor{
+function MovementComponent(name, tags, x_spd, y_spd, input_src, fix_diagonal = true, ignore_game_speed = false, ignore_pause = false, events = [[ev_step, ev_step_normal]]) : Component(name, tags, events) constructor{
 	
 	/// @desc calculates and applies instant velocity
 	/// @arg {Constant.EventType}	ev_type		type of the event in execution
