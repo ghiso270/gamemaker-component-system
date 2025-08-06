@@ -150,6 +150,13 @@ function ComponentManager(obj, components = []) constructor {
 		return array_length(components_by_tag[$ tag]);
 	}
 	
+	/// @desc returns an array containing all the components (in this manager) that share the specified tag
+	/// @arg {String} tag	tag of the components to return
+	/// @returns {Array<Struct.Component>}
+	static tag_get_components = function(tag){
+		return components_by_tag[$ tag];
+	}
+	
 	/// @desc terminates this manager, clearing its memory and destroying all of its components
 	static destroy = function() {
 		var len = array_length(components);
