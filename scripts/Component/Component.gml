@@ -1,6 +1,6 @@
 /// @desc an abstract component class. Subclasses should be used instead, implementing the "execute" method and optionally subcomponents
 /// @arg {String}						name				name of the component
-/// @arg {Array<String>}				tags				tags of the component
+/// @arg {Array<String>}				tags				tags of the component ("*" is reserved, so it must not be included)
 /// @arg {Array<Array<Real>>}			events				list of events in which the component has to be executed, eg: [[ev1_type, ev1_number], [ev2_type, ev2_number], ...]
 
 function Component(name, tags, events) constructor {

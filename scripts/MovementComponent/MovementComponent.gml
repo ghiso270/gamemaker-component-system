@@ -8,7 +8,7 @@
 
 /// @desc Component for basic linear movement, can be fine-tuned with a MovementLogicSubcomponent
 /// @arg {String}							name				name of the component
-/// @arg {Array<String>}					tags				tags of the component
+/// @arg {Array<String>}					tags				tags of the component ("*" is reserved, so it must not be included)
 /// @arg {Real}								x_spd				horizontal speed (in pixels), applied while receiving input
 /// @arg {Real}								y_spd				vertical speed (in pixels), applied while receiving input
 /// @arg {Struct.MovementInputSubcomponent}	input_src			subcomponent that handles the input

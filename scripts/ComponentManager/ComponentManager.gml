@@ -168,6 +168,33 @@ function ComponentManager(obj, components = []) constructor {
 	/// @arg {Bool} to_destroy	if set to true, the destroy method of the component will be performed. defaults to true
 	/// @arg {Bool} remove_tag	if set to true, the tag itself will be removed from the map (instead of just leaving an empty array). defaults to false
 	static tag_remove_components = function(tag, to_destroy = true, remove_tag = false){
+		if(tag == "*"){
+			var len = array_length(components);
+			if(to_destroy){
+				for (var i = 0; i < len; ++i)
+					components[i].destroy();
+			}
+			
+			// separate detachment to allow communication during destroy() method
+			for (var i = 0; i < len; ++i)
+				components[i].detach();
+		
+			self.components = [];
+			self.components_by_name = {};
+			self.components_by_event = [];
+			
+			if(remove_tag){
+				self.components_by_tag = {};
+				return;
+			}
+			
+			var clear_tag_arrays = function(key, val){
+				val = [];
+			}
+			struct_foreach(self.components_by_tag, clear_tag_arrays);
+			
+			return;
+		}
 		
 		if(remove_tag)
 			struct_remove(components_by_tag, tag);
