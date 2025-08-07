@@ -154,7 +154,9 @@ function ComponentManager(obj, components = []) constructor {
 	/// @arg {String} tag	tag of the components to return
 	/// @returns {Array<Struct.Component>}
 	static tag_get_components = function(tag){
-		return components_by_tag[$ tag];
+		
+		// clone the components array and return it safely
+		return variable_clone(components_by_tag[$ tag], 0);
 	}
 		
 	/// @desc removes all the components (in this manager) that share the specified tag.
