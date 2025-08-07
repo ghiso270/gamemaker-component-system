@@ -143,11 +143,15 @@ function ComponentManager(obj, components = []) constructor {
 		component.attach(self);
 	}
 	
-	/// @desc returns the number of components (in this manager) that share the specified tag
+	/// @desc returns the number of components (in this manager) that share the specified tag. it will return -1 if the tag doesn't exist
 	/// @arg {String} tag	tag to get the count of
 	/// @returns {Real}
 	static tag_count = function(tag){
-		return array_length(components_by_tag[$ tag]);
+		var comps = components_by_tag[$ tag];
+		if(is_undefined(comps))
+			return -1;
+		
+		return array_length(comps);
 	}
 	
 	/// @desc returns an array containing all the components (in this manager) that share the specified tag
