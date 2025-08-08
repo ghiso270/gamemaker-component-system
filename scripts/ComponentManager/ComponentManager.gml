@@ -39,7 +39,7 @@ function ComponentManager(obj, components = []) constructor {
 	/// @arg {String} name	name of the component to return
 	/// @returns {Struct.Component}
 	static get_component = function(name){
-		return struct_get(components_by_name, name);
+		return components_by_name[$ name];
 	}
 	
 	/// @desc removes the specified component from memory, optionally destroying it
@@ -121,7 +121,7 @@ function ComponentManager(obj, components = []) constructor {
 		array_push(components, component);
 		
 		// add to name map
-		struct_set(components_by_name, component.name, component);
+		components_by_name[$ component.name] = component;
 		
 		// add to event array
 		var events_num = array_length(component.events);
