@@ -159,6 +159,10 @@ function ComponentManager(obj, components = []) constructor {
 	/// @returns {Array<Struct.Component>}
 	static tag_get_components = function(tag){
 		
+		// allows to access ALL components with a specific tag
+		if(tag == "*")
+			return variable_clone(components, 0);
+		
 		// clone the components array and return it safely
 		return variable_clone(components_by_tag[$ tag], 0);
 	}
