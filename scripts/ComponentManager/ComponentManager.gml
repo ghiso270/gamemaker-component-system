@@ -147,6 +147,11 @@ function ComponentManager(obj, components = []) constructor {
 	/// @arg {String} tag	tag to get the count of
 	/// @returns {Real}
 	static tag_count = function(tag){
+		
+		// return the total number of components
+		if(tag == "*")
+			return array_length(components);
+		
 		var comps = components_by_tag[$ tag];
 		if(is_undefined(comps))
 			return -1;
