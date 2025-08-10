@@ -108,14 +108,12 @@ function ComponentManager(obj, components = []) constructor {
 		var tags_num = array_length(tags);
 		for(var i = 0; i < tags_num; ++i){
 			
-			// get the array of components with the specified tag
-			// (create it if it doesn't exist)
+			// create the tag array with the component in it (if it doesn't already exist)
 			if(is_undefined(components_by_tag[$ tags[i]]))
-				components_by_tag[$ tags[i]] = [];
-			var tag_comp_arr = components_by_tag[$ tags[i]];
-			
-			// if the array is found, add the component to it
-			array_push(tag_comp_arr, component);
+				components_by_tag[$ tags[i]] = [component];
+			else
+				// add the component to the tag array
+				array_push(components_by_tag[$ tags[i]], component);
 		}
 		
 		// add to general array
