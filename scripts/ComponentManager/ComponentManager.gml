@@ -85,13 +85,13 @@ function ComponentManager(obj, components = []) constructor {
 		for(var i = 0; i < tags_num; ++i){
 			
 			// get the array of components with the specified tag
-			var tag_comp_arr = components_by_tag[$ tags[i]];
-			if(is_undefined(tag_comp_arr))
+			var tag_array = components_by_tag[$ tags[i]];
+			if(is_undefined(tag_array))
 				continue;
 			
-			// if the array is found, add the component to it
-			var event_idx = array_get_index(tag_comp_arr, comp);
-			array_delete(tag_comp_arr, event_idx, 1);
+			// if the array is found, remove the component from it
+			var tag_array_index = array_get_index(tag_array, comp);
+			array_delete(tag_array, tag_array_index, 1);
 		}
 	}
 	
