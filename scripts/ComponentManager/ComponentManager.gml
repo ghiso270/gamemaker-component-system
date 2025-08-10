@@ -80,7 +80,7 @@ function ComponentManager(obj, components = []) constructor {
 		comp.detach();
 		
 		// finally, loop through all the tags to remove the item from
-		var tags = comp.tags;
+		var tags = comp.get_tags();
 		var tags_num = array_length(tags);
 		for(var i = 0; i < tags_num; ++i){
 			
@@ -104,7 +104,7 @@ function ComponentManager(obj, components = []) constructor {
 		}
 		
 		// loop through all the tags
-		var tags = component.tags;
+		var tags = component.get_tags();
 		var tags_num = array_length(tags);
 		for(var i = 0; i < tags_num; ++i){
 			

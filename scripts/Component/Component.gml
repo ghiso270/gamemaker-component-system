@@ -50,6 +50,14 @@ function Component(name, tags, events) constructor {
 		execute = function(ev_type, ev_num){};
 	}
 	
+	/// @desc returns an array containing all the tags of this component
+	/// @returns {Array<String>}
+	static get_tags = function(){
+		
+		// clone the tags array and return it safely
+		return variable_clone(tags, 0);
+	}
+	
 	/// @desc allows addition of tags after creation
 	/// @arg {String} tag		tag to add
 	static add_tag = function(tag){
