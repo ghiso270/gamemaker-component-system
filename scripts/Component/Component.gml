@@ -68,6 +68,32 @@ function Component(name, tags, events) constructor {
 			array_push(tag_map[$ tag], self);
 	}
 	
+	/// @desc allows removal of tags after creation
+	/// @arg {String} tag		tag to remove
+	static remove_tag = function(tag){
+		
+		// exit if the tag doesn't exist
+		if(!array_contains(tags, tag))
+			return;
+		
+		// remove from local array
+		var local_array_index = array_get_index(tags, tag);
+		array_delete(tags, local_array_index, 1);
+		
+		if(is_undefined(manager))
+			return;
+		
+		// update the manager's internal structure
+		
+		var tag_array = manager.components_by_tag[$ tag];
+		if(is_undefined(tag_array) || !array_contains(tag_array, self))
+			return;
+			
+		// if the array is found, remove the component from it
+		var tag_array_index = array_get_index(tag_array, self);
+		array_delete(tag_array, tag_array_index, 1);
+	}
+	
 	#endregion
 	
 	#region initialize
