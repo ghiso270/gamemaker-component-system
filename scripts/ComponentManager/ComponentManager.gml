@@ -220,6 +220,20 @@ function ComponentManager(obj, components = []) constructor {
 		    remove_component(comps[i].name, to_destroy);
 	}
 	
+	/// @desc executes a function on all the components with a specified tag
+	/// @arg {String} tag		tag of the components for which the function should run
+	/// @arg {Function} func	function called for each component - takes 1 argument (component) and returns nothing
+	static tag_foreach = function(tag, func) {
+		
+		// if the tag is "*", take all components regardless of tag
+		var comps = (tag == "*" ? components : components_by_tag[$ tag]);
+		
+		// run the function on each component
+		var len = array_length(comps);
+		for (var i = 0; i < len; ++i)
+			func(comps[i]);
+	}
+	
 	/// @desc terminates this manager, clearing its memory and destroying all of its components
 	static destroy = function() {
 		var len = array_length(components);
