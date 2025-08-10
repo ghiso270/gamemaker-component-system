@@ -158,6 +158,13 @@ function ComponentManager(obj, components = []) constructor {
 		return array_length(comps);
 	}
 	
+	/// @desc equivalent of tag_count > 0 (returns false even if the tag exists but has no components)
+	/// @arg {String} tag	tag to check
+	/// @returns {Bool}
+	static tag_exists = function(tag){
+		return (tag_count(tag) > 0);
+	}
+	
 	/// @desc returns an array containing all the components (in this manager) that share the specified tag
 	/// @arg {String} tag	tag of the components to return
 	/// @returns {Array<Struct.Component>}
