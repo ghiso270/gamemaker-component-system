@@ -58,6 +58,13 @@ function Component(name, tags, events) constructor {
 		return variable_clone(tags, 0);
 	}
 	
+	/// @desc returns true if this component has the specified tag
+	/// @arg {String} tag		tag to check
+	/// @returns {Bool}
+	static has_tag = function(tag){
+		return array_contains(tags, tag);
+	}
+	
 	/// @desc allows addition of tags after creation
 	/// @arg {String} tag		tag to add
 	static add_tag = function(tag){
