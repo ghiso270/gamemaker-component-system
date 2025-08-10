@@ -199,7 +199,7 @@ function ComponentManager(obj, components = []) constructor {
 			}
 			
 			var clear_tag_arrays = function(key, val){
-				val = [];
+				self.components_by_tag[$ key] = [];
 			}
 			struct_foreach(self.components_by_tag, clear_tag_arrays);
 			
