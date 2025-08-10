@@ -206,18 +206,18 @@ function ComponentManager(obj, components = []) constructor {
 			return;
 		}
 		
-		if(remove_tag)
-			struct_remove(components_by_tag, tag);
-		
 		// get the array of components
-		var comps = components_by_tag[$ tag];
+		var comps = variable_clone(components_by_tag[$ tag], 0);
 		if(is_undefined(comps))
 			return;
+		
+		if(remove_tag)
+			struct_remove(components_by_tag, tag);
 		
 		// loop through all the components to delete them
 		var len = array_length(comps);
 		for (var i = 0; i < len; ++i)
-		    remove_component(comps[i], to_destroy);
+		    remove_component(comps[i].name, to_destroy);
 	}
 	
 	/// @desc terminates this manager, clearing its memory and destroying all of its components
