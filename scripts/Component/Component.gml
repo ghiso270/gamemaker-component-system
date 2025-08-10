@@ -50,6 +50,24 @@ function Component(name, tags, events) constructor {
 		execute = function(ev_type, ev_num){};
 	}
 	
+	/// @desc allows addition of tags after creation
+	/// @arg {String} tag		tag to add
+	static add_tag = function(tag){
+		
+		// add to local array
+		array_push(tags, tag);
+		
+		if(is_undefined(manager))
+			return;
+		
+		// update the manager's internal structure
+		var tag_map = manager.components_by_tag;
+		if(is_undefined(tag_map[$ tag]))
+			tag_map[$ tag] = [self];
+		else
+			array_push(tag_map[$ tag], self);
+	}
+	
 	#endregion
 	
 	#region initialize
