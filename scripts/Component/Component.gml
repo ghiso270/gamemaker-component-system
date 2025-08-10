@@ -102,6 +102,39 @@ function Component(name, tags, events) constructor {
 		array_delete(tag_array, tag_array_index, 1);
 	}
 	
+	/// @desc allows removal of tags after creation
+	/// @arg {String} old_tag		tag to replace	
+	/// @arg {String} new_tag		name to replace the old tag with		
+	static replace_tag = function(old_tag, new_tag){
+		
+		// exit if the tag doesn't exist
+		if(!array_contains(tags, old_tag))
+			return;
+		
+		// replace in local array
+		var local_array_index = array_get_index(tags, old_tag);
+		tags[local_array_index] = new_tag;
+		
+		if(is_undefined(manager))
+			return;
+		
+		// update the manager's internal structure
+		
+		// if the old tag array is found, remove the component from it
+		var old_tag_array = manager.components_by_tag[$ old_tag];
+		if(is_undefined(old_tag_array) || !array_contains(old_tag_array, self))
+			return;
+		var old_tag_array_index = array_get_index(old_tag_array, self);
+		array_delete(old_tag_array, old_tag_array_index, 1);
+		
+		// add the component to the new tag array
+		var tag_map = manager.components_by_tag;
+		if(is_undefined(tag_map[$ new_tag]))
+			tag_map[$ new_tag] = [self];
+		else
+			array_push(tag_map[$ new_tag], self);
+	}
+	
 	#endregion
 	
 	#region initialize
