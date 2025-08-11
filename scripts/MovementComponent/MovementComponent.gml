@@ -38,8 +38,11 @@ function MovementComponent(name, tags, x_spd, y_spd, input_src, fix_diagonal = t
 			
 			// normalize diagonal movement
 			if(fix_diagonal && dx != 0 && dy != 0) {
-				dx *= 0.7071;
-				dy *= 0.7071;
+				
+				// equivalent to dividing by the square root
+				static sqrt2 = sqrt(2);
+				dx *= sqrt2/2;
+				dy *= sqrt2/2;
 			}
 		}
 		

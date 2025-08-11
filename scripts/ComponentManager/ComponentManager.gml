@@ -63,8 +63,9 @@ function ComponentManager(obj, components = []) constructor {
 		for (var i = 0; i < events_num; ++i) {
 			
 			// find the correct index to delete the component
-			var ev_id = comp.events[i];
-			var event_array = components_by_event[ev_id[0]][$ ev_id[1]];
+			var ev_type = comp.events[i][0];
+			var ev_num = comp.events[i][1];
+			var event_array = components_by_event[ev_type][$ ev_num];
 			var event_idx = array_get_index(event_array, comp);
 			
 			array_delete(event_array, event_idx, 1);
@@ -125,17 +126,18 @@ function ComponentManager(obj, components = []) constructor {
 		// add to event array
 		var events_num = array_length(component.events);
 		for (var i = 0; i < events_num; ++i) {
-			var ev_id = component.events[i];
+			var ev_type = component.events[i][0];
+			var ev_num = component.events[i][1];
 			
 			// create the event number array if it doesn't exist already
-			if(array_length(components_by_event) <= ev_id[0])
-				components_by_event[ev_id[0]] = {};
+			if(array_length(components_by_event) <= ev_type)
+				components_by_event[ev_type] = {};
 			
 			// create the event components array if it doesn't exist already
-			if(is_undefined(components_by_event[ev_id[0]][$ ev_id[1]]))
-				components_by_event[ev_id[0]][$ ev_id[1]] = [];
+			if(is_undefined(components_by_event[ev_type][$ ev_num]))
+				components_by_event[ev_type][$ ev_num] = [];
 			
-			array_push(components_by_event[ev_id[0]][$ ev_id[1]], component);
+			array_push(components_by_event[ev_type][$ ev_num], component);
 		}
 
 		// attach the component
