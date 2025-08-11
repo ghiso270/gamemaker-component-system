@@ -15,9 +15,9 @@
 /// @arg {Bool}								fix_diagonal		if true, it will move at the the same speed even diagonally. ignored when using a MovementLogicSubcomponent. defaults to true
 /// @arg {Bool}								ignore_game_speed	if true, it won't account for global.game_speed value. defaults to false
 /// @arg {Bool}								ignore_pause		if true, it will move even when the game is paused. defaults to false
-/// @arg {Array<Array<Real>>}				events				list of events in which the component has to be executed. defaults to [[ev_step, ev_step_normal]]
+/// @arg {Array<Array<Real>>}				events				list of events (+ priority) in which the component has to be executed. defaults to [[ev_step, ev_step_normal, 1]]
 
-function MovementComponent(name, tags, x_spd, y_spd, input_src, fix_diagonal = true, ignore_game_speed = false, ignore_pause = false, events = [[ev_step, ev_step_normal]]) : Component(name, tags, events) constructor{
+function MovementComponent(name, tags, x_spd, y_spd, input_src, fix_diagonal = true, ignore_game_speed = false, ignore_pause = false, events = [[ev_step, ev_step_normal, 1]]) : Component(name, tags, events) constructor{
 	
 	/// @desc calculates and applies instant velocity
 	/// @arg {Constant.EventType}	ev_type		type of the event in execution

@@ -1,7 +1,7 @@
 /// @desc an abstract component class. Subclasses should be used instead, implementing the "execute" method and optionally subcomponents
 /// @arg {String}						name				name of the component
 /// @arg {Array<String>}				tags				tags of the component ("*" is reserved, so it must not be included)
-/// @arg {Array<Array<Real>>}			events				list of events in which the component has to be executed, eg: [[ev1_type, ev1_number], [ev2_type, ev2_number], ...]
+/// @arg {Array<Array<Real>>}			events				list of events in which the component has to be executed, with the priority as third value (higher number goes first), eg: [[ev_type, ev_number, priority], ...]. the priority is optional and defaults to 1
 
 function Component(name, tags, events) constructor {
 	
@@ -151,5 +151,19 @@ function Component(name, tags, events) constructor {
 	self.tags = tags;
 	self.events = events;
 	
+	var add_default_priority = function(val, i){
+		var default_priority = 1;
+		var priority_index = 2;
+		var len = array_length(val);
+		
+		// print out the error if the length isn't correct
+		if(len < priority_index)
+			show_debug_message($"WARNING: Component with name \"{self.name}\" has incomplete event at index {i}");
+		
+		// add the default priority if the array doesn't have it
+		if(len <= priority_index)
+			self.events[i][priority_index] = default_priority;
+	}
+	array_foreach(self.events, add_default_priority);
 	#endregion
 }
