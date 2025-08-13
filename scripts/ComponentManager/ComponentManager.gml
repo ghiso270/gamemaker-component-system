@@ -78,7 +78,7 @@ function ComponentManager(obj, components = []) constructor {
 				mid = low + floor((high - low) / 2);
 				
 				// If first occurrence is in right subarray
-				if (priority > arr[mid].priority)
+				if (priority < arr[mid].priority)
 					low = mid + 1;
 		
 				// If first occurrence is in left subarray (also when priority is equal)
@@ -161,7 +161,7 @@ function ComponentManager(obj, components = []) constructor {
 				components_by_event[ev_type][$ ev_num] = [];
 			
 			// binary search to find the best position for the component
-			// (sorted by ascending priority)
+			// (sorted by descending priority)
 			var arr = components_by_event[ev_type][$ ev_num];
 			var low = 0;
 			var high = array_length(arr) - 1;
@@ -173,7 +173,7 @@ function ComponentManager(obj, components = []) constructor {
 				// so the middle check can be skipped, only left/right are checked
 		
 				// If element is in left subarray
-				if (priority < arr[mid].priority)
+				if (priority > arr[mid].priority)
 					high = mid - 1;
 		
 				// If element is in right subarray
