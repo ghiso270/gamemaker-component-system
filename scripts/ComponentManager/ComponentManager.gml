@@ -143,7 +143,28 @@ function ComponentManager(obj, components = []) constructor {
 			if(is_undefined(components_by_event[ev_type][$ ev_num]))
 				components_by_event[ev_type][$ ev_num] = [];
 			
-			array_push(components_by_event[ev_type][$ ev_num], {priority: priority, component: component});
+			// binary search to find the best position for the component
+			// (sorted by ascending priority)
+			var arr = components_by_event[ev_type][$ ev_num];
+			var low = 0;
+			var high = array_length(arr) - 1;
+			var mid = 0;
+			while (high >= low) {
+				mid = low + floor((high - low) / 2);
+				
+				// it is assumed that the component isn't already in the array
+				// so the middle check can be skipped, only left/right are checked
+		
+				// If element is in left subarray
+				if (priority < arr[mid].priority)
+					high = mid - 1;
+		
+				// If element is in right subarray
+				else
+					low = mid + 1;
+			}
+			
+			array_insert(arr, low, {priority: priority, component: component});
 		}
 
 		// attach the component
