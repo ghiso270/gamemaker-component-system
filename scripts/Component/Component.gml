@@ -93,7 +93,7 @@ function Component(name, tags, events) constructor {
 		
 		// remove from local array
 		var local_array_index = array_get_index(tags, tag);
-		array_delete(tags, local_array_index, 1);
+		array_swap_and_pop(tags, local_array_index);
 		
 		if(is_undefined(manager))
 			return;
@@ -106,7 +106,7 @@ function Component(name, tags, events) constructor {
 			
 		// if the array is found, remove the component from it
 		var tag_array_index = array_get_index(tag_array, self);
-		array_delete(tag_array, tag_array_index, 1);
+		array_swap_and_pop(tag_array, tag_array_index);
 	}
 	
 	/// @desc allows removal of tags after creation
@@ -132,7 +132,7 @@ function Component(name, tags, events) constructor {
 		if(is_undefined(old_tag_array) || !array_contains(old_tag_array, self))
 			return;
 		var old_tag_array_index = array_get_index(old_tag_array, self);
-		array_delete(old_tag_array, old_tag_array_index, 1);
+		array_swap_and_pop(old_tag_array, old_tag_array_index);
 		
 		// add the component to the new tag array
 		var tag_map = manager.components_by_tag;

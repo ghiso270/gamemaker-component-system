@@ -40,6 +40,7 @@
   "resources":[
     {"id":{"name":"Object1","path":"objects/Object1/Object1.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"id":{"name":"array_swap_and_pop","path":"scripts/array_swap_and_pop/array_swap_and_pop.yy",},},
     {"id":{"name":"Component","path":"scripts/Component/Component.yy",},},
     {"id":{"name":"ComponentManager","path":"scripts/ComponentManager/ComponentManager.yy",},},
     {"id":{"name":"DummyComponent","path":"scripts/DummyComponent/DummyComponent.yy",},},

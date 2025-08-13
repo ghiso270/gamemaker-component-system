@@ -56,7 +56,7 @@ function ComponentManager(obj, components = []) constructor {
 		
 		// delete from the general array
 		var idx = array_get_index(components, comp);
-		array_delete(components, idx, 1);
+		array_swap_and_pop(components, idx);
 		
 		// delete from the event array
 		var events_num = array_length(comp.events);
@@ -114,7 +114,7 @@ function ComponentManager(obj, components = []) constructor {
 			
 			// if the array is found, remove the component from it
 			var tag_array_index = array_get_index(tag_array, comp);
-			array_delete(tag_array, tag_array_index, 1);
+			array_swap_and_pop(tag_array, tag_array_index);
 		}
 	}
 	
