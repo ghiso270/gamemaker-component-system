@@ -23,7 +23,7 @@ function ComponentManager(obj, components = []) constructor {
 		var component_num = array_length(components_to_execute);
 		
 		for (var i = 0; i < component_num; ++i)
-				components_to_execute[i].execute(ev_type, ev_num);
+				components_to_execute[i].component.execute(ev_type, ev_num);
 	}
 	
 	#region utility methods
@@ -62,13 +62,18 @@ function ComponentManager(obj, components = []) constructor {
 		var events_num = array_length(comp.events);
 		for (var i = 0; i < events_num; ++i) {
 			
-			// find the correct index to delete the component
 			var ev_type = comp.events[i][0];
 			var ev_num = comp.events[i][1];
 			var event_array = components_by_event[ev_type][$ ev_num];
-			var event_idx = array_get_index(event_array, comp);
 			
-			array_delete(event_array, event_idx, 1);
+			// find the correct index to delete the component
+			var len = array_length(event_array);
+			for (var j=0; j < len; ++j) {
+			    if(event_array[j].component == comp){
+					array_delete(event_array, j, 1);
+					break;
+				}
+			}
 		}
 		
 		// delete from the name map
@@ -128,6 +133,7 @@ function ComponentManager(obj, components = []) constructor {
 		for (var i = 0; i < events_num; ++i) {
 			var ev_type = component.events[i][0];
 			var ev_num = component.events[i][1];
+			var priority = component.events[i][2];
 			
 			// create the event number array if it doesn't exist already
 			if(array_length(components_by_event) <= ev_type)
@@ -137,7 +143,7 @@ function ComponentManager(obj, components = []) constructor {
 			if(is_undefined(components_by_event[ev_type][$ ev_num]))
 				components_by_event[ev_type][$ ev_num] = [];
 			
-			array_push(components_by_event[ev_type][$ ev_num], component);
+			array_push(components_by_event[ev_type][$ ev_num], {priority: priority, component: component});
 		}
 
 		// attach the component
@@ -328,7 +334,7 @@ function ComponentManager(obj, components = []) constructor {
 	self.components_by_tag = {};
 	
 	// similar to a 3-dimension array that makes each component accessible by event id.
-	// structured like this: array [event_type] -> struct[$ event_number] -> array of components
+	// structured like this: array [event_type] -> struct[$ event_number] -> array of {component: ___, priority: ___}
 	self.components_by_event = [];
 	
 	self.object = obj;
