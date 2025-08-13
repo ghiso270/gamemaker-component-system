@@ -6,16 +6,15 @@
 		- MovementLogicSubcomponent, for custom movement (accelerating, moving as a sine wave, following an object etc.)
 */
 
-/// @desc Component for basic linear movement, can be fine-tuned with a MovementLogicSubcomponent
+/// @desc Component for basic linear movement, can be fine-tuned with a MovementLogicSubcomponent. requires setting an InputComponent with the appropriate method
 /// @arg {String}							name				name of the component
 /// @arg {Array<String>}					tags				tags of the component ("*" is reserved, so it must not be included)
 /// @arg {Real}								x_spd				horizontal speed (in pixels), applied while receiving input
 /// @arg {Real}								y_spd				vertical speed (in pixels), applied while receiving input
-/// @arg {Struct.MovementInputSubcomponent}	input_src			subcomponent that handles the input
 /// @arg {Bool}								fix_diagonal		if true, it will move at the the same speed even diagonally. ignored when using a MovementLogicSubcomponent. defaults to true
 /// @arg {Array<Array<Real>>}				events				list of events (+ priority) in which the component has to be executed. defaults to [[ev_step, ev_step_normal, 1]]
 
-function MovementComponent(name, tags, x_spd, y_spd, input_src, fix_diagonal = true, events = [[ev_step, ev_step_normal, 1]]) : Component(name, tags, events) constructor{
+function MovementComponent(name, tags, x_spd, y_spd, fix_diagonal = true, events = [[ev_step, ev_step_normal, 1]]) : Component(name, tags, events) constructor{
 	
 	/// @desc calculates and applies instant velocity
 	/// @arg {Constant.EventType}	ev_type		type of the event in execution
@@ -85,7 +84,7 @@ function MovementComponent(name, tags, x_spd, y_spd, input_src, fix_diagonal = t
 	#region initialize
 	
 	// set subcomponents
-	set_input_src(input_src);
+	set_input_src(new MovementInputSubcomponent(undefined,undefined,undefined,undefined));
 	set_move_logic_src(undefined);
 	
 	// constants for speed
