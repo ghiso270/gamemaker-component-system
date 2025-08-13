@@ -1,6 +1,6 @@
 /// @desc an abstract component class. Subclasses should be used instead, implementing the "execute" method and optionally subcomponents
 /// @arg {String}						name				name of the component
-/// @arg {Array<String>}				tags				tags of the component ("*" is reserved, so it must not be included)
+/// @arg {Array<String>}				tags				tags of the component ("*" is reserved, so it should not be included)
 /// @arg {Array<Array<Real>>}			events				list of events in which the component has to be executed, with the priority as third value (higher number goes first), eg: [[ev_type, ev_number, priority], ...]. the priority is optional and defaults to 1
 
 function Component(name, tags, events) constructor {
@@ -150,6 +150,9 @@ function Component(name, tags, events) constructor {
 	self.name = name;
 	self.tags = tags;
 	self.events = events;
+	
+	if(array_contains(tags, "*"))
+		show_debug_message($"WARNING: The tag \"*\" is reserved and should not be used as a tag");
 	
 	var add_default_priority = function(val, i){
 		var default_priority = 1;
