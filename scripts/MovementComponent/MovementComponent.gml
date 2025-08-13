@@ -13,20 +13,14 @@
 /// @arg {Real}								y_spd				vertical speed (in pixels), applied while receiving input
 /// @arg {Struct.MovementInputSubcomponent}	input_src			subcomponent that handles the input
 /// @arg {Bool}								fix_diagonal		if true, it will move at the the same speed even diagonally. ignored when using a MovementLogicSubcomponent. defaults to true
-/// @arg {Bool}								ignore_game_speed	if true, it won't account for global.game_speed value. defaults to false
-/// @arg {Bool}								ignore_pause		if true, it will move even when the game is paused. defaults to false
 /// @arg {Array<Array<Real>>}				events				list of events (+ priority) in which the component has to be executed. defaults to [[ev_step, ev_step_normal, 1]]
 
-function MovementComponent(name, tags, x_spd, y_spd, input_src, fix_diagonal = true, ignore_game_speed = false, ignore_pause = false, events = [[ev_step, ev_step_normal, 1]]) : Component(name, tags, events) constructor{
+function MovementComponent(name, tags, x_spd, y_spd, input_src, fix_diagonal = true, events = [[ev_step, ev_step_normal, 1]]) : Component(name, tags, events) constructor{
 	
 	/// @desc calculates and applies instant velocity
 	/// @arg {Constant.EventType}	ev_type		type of the event in execution
 	/// @arg {Constant.EventNumber} ev_num		number of the event in execution
 	static execute = function(ev_type, ev_num){
-		
-		// if missing input source or if the game is paused, abort
-		if(input == undefined || (global.game_pause && !ignore_pause))
-			return;
 		
 		// apply custom logic or linear (default)
 		if(move_logic != undefined) {
@@ -46,12 +40,6 @@ function MovementComponent(name, tags, x_spd, y_spd, input_src, fix_diagonal = t
 			}
 		}
 		
-		// game_speed can make it faster (like 2x) or slower (0.5x) depending on the values
-		if(!ignore_game_speed){
-			dx *= global.game_speed;
-			dy *= global.game_speed;
-		}
-		
 		update_pos();
 	}
 	
@@ -66,7 +54,7 @@ function MovementComponent(name, tags, x_spd, y_spd, input_src, fix_diagonal = t
 	static set_input_src = function(input_src){
 		self.input = input_src;
 		
-		if(input_src == undefined)
+		if(is_undefined(input_src))
 			return;
 			
 		input_src.attach(self);
@@ -83,15 +71,12 @@ function MovementComponent(name, tags, x_spd, y_spd, input_src, fix_diagonal = t
 		move_logic_src.attach(self);
 	}
 	
-	/// @desc returns a variable that works as delta_time/1_000_000, but can take into account other variables, such as game_speed
+	/// @desc returns a variable that works as delta_time/1_000_000, but can take into account other variables, such as speed_multiplier
 	/// @return {Real}
 	static get_dt = function(){
-		if(!ignore_pause && global.game_pause)
-			return 0;
-		
 		var dt = delta_time/1_000_000;
-		if(!ignore_game_speed)
-			dt *= global.game_speed;
+		
+		dt *= speed_multiplier;
 		
 		return dt;
 	}
@@ -106,6 +91,7 @@ function MovementComponent(name, tags, x_spd, y_spd, input_src, fix_diagonal = t
 	// constants for speed
 	self.x_spd = x_spd;
 	self.y_spd = y_spd;
+	self.speed_multiplier = 1;
 	
 	// instant velocity
 	self.dx = 0;
@@ -113,8 +99,6 @@ function MovementComponent(name, tags, x_spd, y_spd, input_src, fix_diagonal = t
 	
 	// other parameters
 	self.fix_diagonal = fix_diagonal;
-	self.ignore_game_speed = ignore_game_speed;
-	self.ignore_pause = ignore_pause;
 	
 	#endregion
 }
