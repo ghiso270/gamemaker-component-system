@@ -64,16 +64,32 @@ function ComponentManager(obj, components = []) constructor {
 			
 			var ev_type = comp.events[i][0];
 			var ev_num = comp.events[i][1];
-			var event_array = components_by_event[ev_type][$ ev_num];
+			var priority = comp.events[i][2];
+			var arr = components_by_event[ev_type][$ ev_num];
 			
-			// find the correct index to delete the component
-			var len = array_length(event_array);
-			for (var j=0; j < len; ++j) {
-			    if(event_array[j].component == comp){
-					array_delete(event_array, j, 1);
+			// binary search to find the position of the component
+			// (sorted by ascending priority)
+			var low = 0;
+			var high = array_length(arr) - 1;
+			var mid = 0;
+			while (high >= low) {
+				mid = low + floor((high - low) / 2);
+				
+				// If element is in the middle
+				// the components are compared directly to avoid deleting another component with the same priority
+				if (comp < arr[mid].component)
 					break;
-				}
+				
+				// If element is in left subarray
+				if (priority < arr[mid].priority)
+					high = mid - 1;
+		
+				// If element is in right subarray
+				else
+					low = mid + 1;
 			}
+			
+			array_delete(arr, mid, 1);
 		}
 		
 		// delete from the name map
