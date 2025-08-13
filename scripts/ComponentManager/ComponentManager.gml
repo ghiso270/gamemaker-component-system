@@ -66,30 +66,31 @@ function ComponentManager(obj, components = []) constructor {
 			var ev_num = comp.events[i][1];
 			var priority = comp.events[i][2];
 			var arr = components_by_event[ev_type][$ ev_num];
+			var len = array_length(arr);
 			
-			// binary search to find the position of the component
-			// (sorted by ascending priority)
+			// binary search to find the first occurrence of the correct priority
+			// after that, linear search
+			// because bin search doesn't work correctly with same-key-different-value structures
 			var low = 0;
-			var high = array_length(arr) - 1;
+			var high = len - 1;
 			var mid = 0;
 			while (high >= low) {
 				mid = low + floor((high - low) / 2);
 				
-				// If element is in the middle
-				// the components are compared directly to avoid deleting another component with the same priority
-				if (comp < arr[mid].component)
-					break;
-				
-				// If element is in left subarray
-				if (priority < arr[mid].priority)
-					high = mid - 1;
-		
-				// If element is in right subarray
-				else
+				// If first occurrence is in right subarray
+				if (priority > arr[mid].priority)
 					low = mid + 1;
+		
+				// If first occurrence is in left subarray (also when priority is equal)
+				else
+					high = mid - 1;
 			}
-			
-			array_delete(arr, mid, 1);
+			var j = low;
+			for (; j < len; ++j){
+			    if(arr[j].component == comp)
+					break;
+			}
+			array_delete(arr, j, 1);
 		}
 		
 		// delete from the name map
