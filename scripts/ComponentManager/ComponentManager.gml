@@ -213,15 +213,16 @@ function ComponentManager(obj, components = []) constructor {
 	
 	/// @desc returns an array containing all the components (in this manager) that share the specified tag
 	/// @arg {String} tag	tag of the components to return
+	/// @arg {Bool} safe	ensures the returned array is safe to modify, false can be used for read-only purposes. defaults to true
 	/// @returns {Array<Struct.Component>}
-	static tag_get_components = function(tag){
+	static tag_get_components = function(tag, safe = true){
 		
 		// allows to access ALL components with a specific tag
 		if(tag == "*")
-			return variable_clone(components, 0);
+			return safe ? variable_clone(components, 0) : components;
 		
-		// clone the components array and return it safely
-		return variable_clone(components_by_tag[$ tag], 0);
+		// clone the components array and return it safely (if requested)
+		return safe ? variable_clone(components_by_tag[$ tag], 0) : components_by_tag[$ tag];
 	}
 		
 	/// @desc removes all the components (in this manager) that share the specified tag.

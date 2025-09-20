@@ -51,11 +51,12 @@ function Component(name, tags, events) constructor {
 	}
 	
 	/// @desc returns an array containing all the tags of this component
+	/// @arg {Bool} safe	ensures the returned array is safe to modify, false can be used for read-only purposes. defaults to true
 	/// @returns {Array<String>}
-	static get_tags = function(){
+	static get_tags = function(safe = true){
 		
-		// clone the tags array and return it safely
-		return variable_clone(tags, 0);
+		// clone the tags array and return it safely (if requested)
+		return safe ? variable_clone(tags, 0) : tags;
 	}
 	
 	/// @desc returns true if this component has the specified tag
