@@ -28,16 +28,6 @@ function Component(name, tags, events) constructor {
 		self.manager = undefined;
 	}
 	
-	/// @desc enables execute method
-	static activate = function(){
-		
-		// exit if already active
-		if(is_active) return;
-		is_active = true;
-		
-		execute = deactivated_execute;
-	}
-	
 	/// @desc disables execute method
 	static deactivate = function(){
 		
@@ -50,13 +40,14 @@ function Component(name, tags, events) constructor {
 		execute = function(ev_type, ev_num){};
 	}
 	
-	/// @desc returns an array containing all the tags of this component
-	/// @arg {Bool} safe	ensures the returned array is safe to modify, false can be used for read-only purposes. defaults to true
-	/// @returns {Array<String>}
-	static get_tags = function(safe = true){
+	/// @desc enables execute method
+	static activate = function(){
 		
-		// clone the tags array and return it safely (if requested)
-		return safe ? variable_clone(tags, 0) : tags;
+		// exit if already active
+		if(is_active) return;
+		is_active = true;
+		
+		execute = deactivated_execute;
 	}
 	
 	/// @desc returns true if this component has the specified tag
@@ -64,6 +55,15 @@ function Component(name, tags, events) constructor {
 	/// @returns {Bool}
 	static has_tag = function(tag){
 		return array_contains(tags, tag);
+	}
+	
+	/// @desc returns an array containing all the tags of this component
+	/// @arg {Bool} safe	ensures the returned array is safe to modify, false can be used for read-only purposes. defaults to true
+	/// @returns {Array<String>}
+	static get_tags = function(safe = true){
+		
+		// clone the tags array and return it safely (if requested)
+		return safe ? variable_clone(tags, 0) : tags;
 	}
 	
 	/// @desc allows addition of tags after creation

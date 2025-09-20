@@ -41,14 +41,84 @@ function ComponentManager(obj, components = []) constructor {
 	static get_component = function(name){
 		return components_by_name[$ name];
 	}
+		
+	/// @desc adds the specified component to memory, for execution and management
+	/// @arg {Struct.Component} component		component to add
+	static add_component = function(component){
+		if(has_component(component.name)){
+			show_debug_message($"WARNING: Component named \"{component.name}\" already exists");
+			return;
+		}
+		
+		// loop through all the tags
+		var tags = component.get_tags();
+		var tags_num = array_length(tags);
+		for(var i = 0; i < tags_num; ++i){
+			
+			// create the tag array with the component in it (if it doesn't already exist)
+			if(is_undefined(components_by_tag[$ tags[i]]))
+				components_by_tag[$ tags[i]] = [component];
+			else
+				// add the component to the tag array
+				array_push(components_by_tag[$ tags[i]], component);
+		}
+		
+		// add to general array
+		array_push(components, component);
+		
+		// add to name map
+		components_by_name[$ component.name] = component;
+		
+		// add to event array
+		var events_num = array_length(component.events);
+		for (var i = 0; i < events_num; ++i) {
+			var ev_type = component.events[i][0];
+			var ev_num = component.events[i][1];
+			var priority = component.events[i][2];
+			
+			// create the event number array if it doesn't exist already
+			if(array_length(components_by_event) <= ev_type)
+				components_by_event[ev_type] = {};
+			
+			// create the event components array if it doesn't exist already
+			if(is_undefined(components_by_event[ev_type][$ ev_num]))
+				components_by_event[ev_type][$ ev_num] = [];
+			
+			// binary search to find the best position for the component
+			// (sorted by descending priority)
+			var arr = components_by_event[ev_type][$ ev_num];
+			var low = 0;
+			var high = array_length(arr) - 1;
+			var mid = 0;
+			while (high >= low) {
+				mid = low + floor((high - low) / 2);
+				
+				// it is assumed that the component isn't already in the array
+				// so the middle check can be skipped, only left/right are checked
+		
+				// If element is in left subarray
+				if (priority > arr[mid].priority)
+					high = mid - 1;
+		
+				// If element is in right subarray
+				else
+					low = mid + 1;
+			}
+			
+			array_insert(arr, low, {priority: priority, component: component});
+		}
+
+		// attach the component
+		component.attach(self);
+	}
 	
-	/// @desc removes the specified component from memory, optionally destroying it
+	/// @desc removes the specified component from memory, destroying it by default
 	/// @arg {String} name		name of the component to remove
-	/// @arg {Bool} to_destroy	if set to true, the destroy method of the component will be performed. defaults to true
+	/// @arg {Bool} to_destroy	if set to true (default), the destroy method of the component will be performed
 	static remove_component = function(name, to_destroy = true){
 		// if the component doesn't exist, don't remove it
 		if(!has_component(name)){
-			show_debug_message($"WARNING: The name \"{name}\" doesn't exist");
+			show_debug_message($"WARNING: the Component named \"{name}\" doesn't exist");
 			return;
 		}
 		
@@ -116,76 +186,6 @@ function ComponentManager(obj, components = []) constructor {
 			var tag_array_index = array_get_index(tag_array, comp);
 			array_swap_and_pop(tag_array, tag_array_index);
 		}
-	}
-	
-	/// @desc adds the specified component to memory, for execution and management
-	/// @arg {Struct.Component} component		component to add
-	static add_component = function(component){
-		if(has_component(component.name)){
-			show_debug_message($"WARNING: The name \"{component.name}\" already exists");
-			return;
-		}
-		
-		// loop through all the tags
-		var tags = component.get_tags();
-		var tags_num = array_length(tags);
-		for(var i = 0; i < tags_num; ++i){
-			
-			// create the tag array with the component in it (if it doesn't already exist)
-			if(is_undefined(components_by_tag[$ tags[i]]))
-				components_by_tag[$ tags[i]] = [component];
-			else
-				// add the component to the tag array
-				array_push(components_by_tag[$ tags[i]], component);
-		}
-		
-		// add to general array
-		array_push(components, component);
-		
-		// add to name map
-		components_by_name[$ component.name] = component;
-		
-		// add to event array
-		var events_num = array_length(component.events);
-		for (var i = 0; i < events_num; ++i) {
-			var ev_type = component.events[i][0];
-			var ev_num = component.events[i][1];
-			var priority = component.events[i][2];
-			
-			// create the event number array if it doesn't exist already
-			if(array_length(components_by_event) <= ev_type)
-				components_by_event[ev_type] = {};
-			
-			// create the event components array if it doesn't exist already
-			if(is_undefined(components_by_event[ev_type][$ ev_num]))
-				components_by_event[ev_type][$ ev_num] = [];
-			
-			// binary search to find the best position for the component
-			// (sorted by descending priority)
-			var arr = components_by_event[ev_type][$ ev_num];
-			var low = 0;
-			var high = array_length(arr) - 1;
-			var mid = 0;
-			while (high >= low) {
-				mid = low + floor((high - low) / 2);
-				
-				// it is assumed that the component isn't already in the array
-				// so the middle check can be skipped, only left/right are checked
-		
-				// If element is in left subarray
-				if (priority > arr[mid].priority)
-					high = mid - 1;
-		
-				// If element is in right subarray
-				else
-					low = mid + 1;
-			}
-			
-			array_insert(arr, low, {priority: priority, component: component});
-		}
-
-		// attach the component
-		component.attach(self);
 	}
 	
 	/// @desc returns the number of components (in this manager) that share the specified tag. it will return -1 if the tag doesn't exist
@@ -286,6 +286,16 @@ function ComponentManager(obj, components = []) constructor {
 			func(comps[i]);
 	}
 	
+	/// @desc pauses this manager, meaning the execute method will skip (starting from the next execution)
+	static pause = function() {
+		is_paused = true;
+	}
+	
+	/// @desc resumes this manager, meaning the execute method will run normally until paused again
+	static resume = function() {
+		is_paused = false;
+	}
+	
 	/// @desc terminates this manager, clearing its memory and destroying all of its components
 	static destroy = function() {
 		var len = array_length(components);
@@ -300,16 +310,6 @@ function ComponentManager(obj, components = []) constructor {
 		self.components_by_name = {};
 		self.components_by_tag = {};
 		self.components_by_event = [];
-	}
-	
-	/// @desc pauses this manager, meaning the execute method will skip (starting from the next execution)
-	static pause = function() {
-		is_paused = true;
-	}
-	
-	/// @desc resumes this manager, meaning the execute method will run normally until paused again
-	static resume = function() {
-		is_paused = false;
 	}
 	
 	/// @desc returns a multi-line string containing the components in this manager, each line structured as "N - Component", N starting from 1
@@ -363,7 +363,7 @@ function ComponentManager(obj, components = []) constructor {
 	
 	#region initialize
 	
-	// array containing all components, indexed by ID
+	// array containing all components
 	self.components = [];
 	
 	// map that matches a name to a component
@@ -373,7 +373,7 @@ function ComponentManager(obj, components = []) constructor {
 	self.components_by_tag = {};
 	
 	// similar to a 3-dimension array that makes each component accessible by event id.
-	// structured like this: array [event_type] -> struct[$ event_number] -> array of {component: ___, priority: ___}
+	// structured like this: array [event_type] -> struct[$ event_number] -> array of {component, priority}
 	self.components_by_event = [];
 	
 	self.object = obj;
