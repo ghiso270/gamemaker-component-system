@@ -70,6 +70,12 @@ function Component(name, tags, events) constructor {
 	/// @arg {String} tag		tag to add
 	static add_tag = function(tag){
 		
+		// wildcard check
+		if(tag == "*"){
+			show_debug_message($"WARNING: The tag \"*\" is reserved and cannot be used as a tag");
+			return;
+		}
+		
 		// add to local array
 		array_push(tags, tag);
 		
@@ -119,6 +125,12 @@ function Component(name, tags, events) constructor {
 		if(!array_contains(tags, old_tag))
 			return;
 		
+		// wildcard check
+		if(old_tag == "*" || new_tag == "*"){
+			show_debug_message($"WARNING: The tag \"*\" is reserved and cannot be used as a tag");
+			return;
+		}
+		
 		// replace in local array
 		var local_array_index = array_get_index(tags, old_tag);
 		tags[local_array_index] = new_tag;
@@ -147,13 +159,22 @@ function Component(name, tags, events) constructor {
 	
 	#region initialize
 	
+	// wildcard check
+	if(array_contains(tags, "*")){
+		show_debug_message($"WARNING: The tag \"*\" is reserved and cannot be used as a tag");
+		
+		// remove all wildcard tags from the array
+		var idx = array_get_index(tags, "*");
+		while(idx != -1){
+			array_swap_and_pop(tags, idx);
+			idx = array_get_index(tags, "*", idx);
+		}
+	}
+	
 	self.is_active = true;
 	self.name = name;
 	self.tags = tags;
 	self.events = events;
-	
-	if(array_contains(tags, "*"))
-		show_debug_message($"WARNING: The tag \"*\" is reserved and should not be used as a tag");
 	
 	var add_default_priority = function(val, i){
 		var default_priority = 1;
