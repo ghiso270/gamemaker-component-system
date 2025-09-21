@@ -76,6 +76,12 @@ function Component(name, tags, events) constructor {
 			return;
 		}
 		
+		// exit if the tag already exists
+		if(array_contains(tags, tag)){
+			show_debug_message($"WARNING: the tag \"{tag}\" already exists");
+			return;
+		}
+		
 		// add to local array
 		array_push(tags, tag);
 		
@@ -95,8 +101,10 @@ function Component(name, tags, events) constructor {
 	static remove_tag = function(tag){
 		
 		// exit if the tag doesn't exist
-		if(!array_contains(tags, tag))
+		if(!array_contains(tags, tag)){
+			show_debug_message($"WARNING: the tag \"{tag}\" doesn't exist");
 			return;
+		}
 		
 		// remove from local array
 		var local_array_index = array_get_index(tags, tag);
@@ -121,13 +129,20 @@ function Component(name, tags, events) constructor {
 	/// @arg {String} new_tag		name to replace the old tag with		
 	static replace_tag = function(old_tag, new_tag){
 		
-		// exit if the tag doesn't exist
-		if(!array_contains(tags, old_tag))
-			return;
-		
 		// wildcard check
 		if(old_tag == "*" || new_tag == "*"){
-			show_debug_message($"WARNING: The tag \"*\" is reserved and cannot be used as a tag");
+			show_debug_message("WARNING: The tag \"*\" is reserved and cannot be used as a tag");
+			return;
+		}
+		
+		// exit if the old tag doesn't exist
+		if(!array_contains(tags, old_tag)){
+			show_debug_message($"WARNING: the tag \"{old_tag}\" doesn't exist");
+			return;
+		}
+		// exit if the new tag already exists
+		if(array_contains(tags, new_tag)){
+			show_debug_message($"WARNING: the tag \"{new_tag}\" already exists");
 			return;
 		}
 		
@@ -159,16 +174,15 @@ function Component(name, tags, events) constructor {
 	
 	#region initialize
 	
+	// remove duplicate tags
+	tags = array_unique(tags);
+	
 	// wildcard check
 	if(array_contains(tags, "*")){
 		show_debug_message($"WARNING: The tag \"*\" is reserved and cannot be used as a tag");
 		
-		// remove all wildcard tags from the array
-		var idx = array_get_index(tags, "*");
-		while(idx != -1){
-			array_swap_and_pop(tags, idx);
-			idx = array_get_index(tags, "*", idx);
-		}
+		// remove wildcard tag from the array
+		array_swap_and_pop(tags, array_get_index(tags, "*"));
 	}
 	
 	self.is_active = true;
