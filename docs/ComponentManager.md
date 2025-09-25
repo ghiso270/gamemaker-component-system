@@ -375,7 +375,7 @@ This variable stores a reference to the GameMaker Object instance specified in t
 object;
 ```
 
-Returns: Id.Instance
+Returns: `Id.Instance`
 
 > Note: It is highly recommended not to manually edit this field as it is designed for read-only use.
 
