@@ -45,8 +45,8 @@ function ComponentManager(obj, components = []) constructor {
 	/// @desc adds the specified component to memory, for execution and management
 	/// @arg {Struct.Component} component		component to add
 	static add_component = function(component){
-		if(has_component(component.name)){
-			show_debug_message($"WARNING: Component named \"{component.name}\" already exists");
+		if(has_component(component.get_name())){
+			show_debug_message($"WARNING: Component named \"{component.get_name()}\" already exists");
 			return;
 		}
 		
@@ -67,14 +67,15 @@ function ComponentManager(obj, components = []) constructor {
 		array_push(components, component);
 		
 		// add to name map
-		components_by_name[$ component.name] = component;
+		components_by_name[$ component.get_name()] = component;
 		
 		// add to event array
-		var events_num = array_length(component.events);
+		var events = component.__.events;
+		var events_num = array_length(events);
 		for (var i = 0; i < events_num; ++i) {
-			var ev_type = component.events[i][0];
-			var ev_num = component.events[i][1];
-			var priority = component.events[i][2];
+			var ev_type = events[i][0];
+			var ev_num = events[i][1];
+			var priority = events[i][2];
 			
 			// create the event number array if it doesn't exist already
 			if(array_length(components_by_event) <= ev_type)
@@ -109,7 +110,7 @@ function ComponentManager(obj, components = []) constructor {
 		}
 
 		// attach the component
-		component.attach(self);
+		component.__.manager = self;
 	}
 	
 	/// @desc removes the specified component from memory, destroying it by default
@@ -129,12 +130,13 @@ function ComponentManager(obj, components = []) constructor {
 		array_swap_and_pop(components, idx);
 		
 		// delete from the event array
-		var events_num = array_length(comp.events);
+		var events = comp.__.events;
+		var events_num = array_length(events);
 		for (var i = 0; i < events_num; ++i) {
 			
-			var ev_type = comp.events[i][0];
-			var ev_num = comp.events[i][1];
-			var priority = comp.events[i][2];
+			var ev_type = events[i][0];
+			var ev_num = events[i][1];
+			var priority = events[i][2];
 			var arr = components_by_event[ev_type][$ ev_num];
 			var len = array_length(arr);
 			
@@ -170,7 +172,7 @@ function ComponentManager(obj, components = []) constructor {
 		if(to_destroy)
 			comp.destroy();
 		
-		comp.detach();
+		comp.__.manager = undefined;
 		
 		// finally, loop through all the tags to remove the item from
 		var tags = comp.get_tags();
@@ -239,7 +241,7 @@ function ComponentManager(obj, components = []) constructor {
 			
 			// separate detachment to allow communication during destroy() method
 			for (var i = 0; i < len; ++i)
-				components[i].detach();
+				components[i].__.manager = undefined;
 		
 			self.components = [];
 			self.components_by_name = {};
@@ -269,7 +271,7 @@ function ComponentManager(obj, components = []) constructor {
 		// loop through all the components to delete them
 		var len = array_length(comps);
 		for (var i = 0; i < len; ++i)
-		    remove_component(comps[i].name, to_destroy);
+		    remove_component(comps[i].get_name(), to_destroy);
 	}
 	
 	/// @desc executes a function on all the components with a specified tag
@@ -304,7 +306,7 @@ function ComponentManager(obj, components = []) constructor {
 		
 		// separate detachment to allow communication during destroy() method
 		for (var i = 0; i < len; ++i)
-			components[i].detach();
+			components[i].__.manager = undefined;
 		
 		self.components = [];
 		self.components_by_name = {};
@@ -344,7 +346,7 @@ function ComponentManager(obj, components = []) constructor {
 		for (var i = 0; i < len; ++i) {
 			
 			// skip inactives
-			if(active_only && !components[i].is_active)
+			if(active_only && !components[i].is_active())
 				continue;
 			
 			// write ordinal number with padding
@@ -352,7 +354,7 @@ function ComponentManager(obj, components = []) constructor {
 		    out += string_repeat(" ", len_digits - string_length(ordinal)) + ordinal + " - ";
 			
 			// write component (json or name)
-			out += expand_criteria(components[i]) ? json_stringify(components[i], false, json_filter) : components[i].name;
+			out += expand_criteria(components[i]) ? json_stringify(components[i], false, json_filter) : components[i].get_name();
 			out += "\n";
 		}
 		

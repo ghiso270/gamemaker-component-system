@@ -73,29 +73,59 @@ Returns: `N/A`
 > It shouldn't be used anywhere else unless specified otherwise.
 
 ---
-## Attach (Private)
-This function stores the reference of the ComponentManager for internal behavior
+## Get Manager
+This function returns a direct reference (not a copy) the ComponentManager of this Component.
 ``` gml
-attach(manager);
+get_manager();
 ```
 
-| Argument | Type                    | Description                                                 |
-| -------- | ----------------------- | ----------------------------------------------------------- |
-| manager  | Struct.ComponentManager | The ComponentManager inside which this Component is stored. |
-Returns: `N/A`
+Returns: `Struct.ComponentManager`
 
-> Note: It is highly recommended not to use this method as it is only necessary for internal behavior and can cause malfunctioning if used incorrectly.
+> Note: The output of this function is NOT safe to edit and should be treated as read-only.
+
+Example:
+``` gml
+if(movement_component.get_manager().has_component("dummy")){
+	show_debug_message("the manager has a Component named 'dummy'");
+}else{
+	show_debug_message("the manager doesn't have a Component named 'dummy'");
+}
+```
+The above code performs a check on the contents of the ComponentManager and prints text accordingly.
 
 ---
-## Detach (Private)
-This function removes the reference of the ComponentManager.
+## Get Name
+This function returns the name of this Component.
 ``` gml
-detach();
+get_name();
 ```
 
-Returns: `N/A`
+Returns: `String`
 
-> Note: It is highly recommended not to use this method as it is only necessary for internal behavior and can cause malfunctioning if used incorrectly.
+Example:
+``` gml
+show_debug_message("the Component name is " + movement_component.get_name());
+```
+The above code prints the name of the *movement_component* variable.
+
+---
+## Is Active
+This function returns the current state of the Component, being true if active and false otherwise.
+``` gml
+is_active();
+```
+
+Returns: `Bool`
+
+Example:
+``` gml
+if(movement_component.is_active()){
+	show_debug_message("the Component is active");
+}else{
+	show_debug_message("the Component is inactive");
+}
+```
+The above code performs a check on the current state of the Component and prints the result.
 
 ---
 ## Deactivate
@@ -275,69 +305,10 @@ if(movement_component.has_tag("movement")){
 The above code checks if *movement_component* is tagged as "movement" and if it is, the tag is replaced with "move".
 
 ---
-# Fields
+# Fields (PRIVATE)
 
 ---
-## Manager (Read-Only)
-This variable stores the ComponentManager passed in the *attach()* method.
-``` gml
-manager;
-```
-
-Returns: `Struct.ComponentManager`
-
-> Note: It is highly recommended not to manually edit this field as it is designed for read-only use.
-
-Example:
-``` gml
-if(movement_component.manager.has_component("dummy")){
-	show_debug_message("the manager has a Component named 'dummy'");
-}else{
-	show_debug_message("the manager doesn't have a Component named 'dummy'");
-}
-```
-The above code performs a check on the contents of the ComponentManager
-
----
-## Is Active (Read-Only)
-This variable stores the active state of the Component, being true if active and false otherwise.
-``` gml
-is_active;
-```
-
-Returns: `Bool`
-
-> Note: It is highly recommended not to manually edit this field as it is designed for read-only use.
-
-Example:
-``` gml
-if(movement_component.is_active){
-	show_debug_message("the Component is active");
-}else{
-	show_debug_message("the Component is inactive");
-}
-```
-The above code performs a check on the current state of the Component and prints the result.
-
----
-## Name (Read-Only)
-This variable stores the name of the Component, it must be unique inside of the ComponentManager because it's needed for Component identification.
-``` gml
-name;
-```
-
-Returns: `String`
-
-> Note: It is highly recommended not to manually edit this field as it is designed for read-only use.
-
-Example:
-``` gml
-show_debug_message("the Component name is " + movement_component.name);
-```
-The above code prints the name of the *movement_component* variable.
-
----
-## Events (Private)
+## Events
 This variable stores the array of events in which the component will execute.
 It is structured like this: \[ \[event_type, event_number, priority\], ... \]
 ``` gml
@@ -346,10 +317,8 @@ events;
 
 Returns: `Array<[Real,Real,Real]>`
 
-> Note: It is highly recommended not to use this field as it is only necessary for internal behavior and can cause malfunctioning if used incorrectly.
-
 ---
-## Tags (Private)
+## Tags
 This variable stores the tags for this Component.
 ``` gml
 tags;
@@ -357,4 +326,29 @@ tags;
 
 Returns: `Array<String>`
 
-> Note: It is highly recommended not to use this field as it is only necessary for internal behavior and can cause malfunctioning if used incorrectly. You should use *get_tags()* instead
+---
+## Manager
+This variable stores the ComponentManager of this Component.
+``` gml
+manager;
+```
+
+Returns: `Struct.ComponentManager`
+
+---
+## Is Active
+This variable stores the active state of the Component, being true if active and false otherwise.
+``` gml
+is_active;
+```
+
+Returns: `Bool`
+
+---
+## Name
+This variable stores the name of the Component, it must be unique inside of the ComponentManager because it's needed for Component identification.
+``` gml
+name;
+```
+
+Returns: `String`
