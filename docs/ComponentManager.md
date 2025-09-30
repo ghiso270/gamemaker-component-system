@@ -63,6 +63,24 @@ manager.execute();
 The above code runs the *execute()* method in the Step Event of obj_player.
 
 ---
+## Get Object
+This function returns a direct reference (not a copy) of the GameMaker Object given in the Constructor (usually the Object containing this ComponentManager).
+``` gml
+get_object();
+```
+
+Returns: `Id.Instance`
+
+> Note: The output of this function is NOT safe to edit and should be treated as read-only.
+
+Example:
+``` gml
+manager.get_object().x = 0;
+manager.get_object().y = 0;
+```
+The above code resets the position of the Object containing *manager*.
+
+---
 ## Has Component
 This function checks if a Component exists and returns true if it does, returning false otherwise.
 ``` gml
@@ -280,6 +298,16 @@ manager.tag_foreach("score-manager", reset_score);
 The above code defines a *reset_score()* function, which is then executed on all Components tagged "score-manager".
 
 ---
+## Is Paused
+This function returns the current pause state of the ComponentManager.
+It is updated by the *pause()* and *resume()* methods.
+``` gml
+is_paused();
+```
+
+Returns: `Bool`
+
+---
 ## Pause
 This function pauses this ComponentManager, preventing the *execute()* from executing.
 ``` gml
@@ -366,10 +394,10 @@ list of components:
 ```
 
 ---
-# Fields
+# Fields (PRIVATE)
 
 ---
-## Object (Read-Only)
+## Object
 This variable stores a reference to the GameMaker Object instance specified in the constructor.
 ``` gml
 object;
@@ -377,10 +405,8 @@ object;
 
 Returns: `Id.Instance`
 
-> Note: It is highly recommended not to manually edit this field as it is designed for read-only use.
-
 ---
-## Is Paused (Read-Only)
+## Is Paused
 This variable stores the current pause state, it is used in the *execute()* method to choose whether or not to skip execution. It is updated by the *pause()* and *resume()* methods.
 ``` gml
 is_paused;
@@ -388,10 +414,8 @@ is_paused;
 
 Returns: `Bool`
 
-> Note: It is highly recommended not to manually edit this field as it is designed for read-only use.
-
 ---
-## Components (Private)
+## Components
 This variable stores all the Components managed by this ComponentManager as an array.
 ``` gml
 components;
@@ -399,10 +423,8 @@ components;
 
 Returns: `Array<Struct.Component>`
 
-> Note: It is highly recommended not to use this field as it is only necessary for internal behavior and can cause malfunctioning if used incorrectly.
-
 ---
-## Components by Name (Private)
+## Components by Name
 This variable stores all the Components in a struct (map-like) that matches a name to a Component. 
 ``` gml
 components_by_name;
@@ -410,10 +432,8 @@ components_by_name;
 
 Returns: `Struct`
 
-> Note: It is highly recommended not to use this field as it is only necessary for internal behavior and can cause malfunctioning if used incorrectly.
-
 ---
-## Components by Tag (Private)
+## Components by Tag
 This variable stores all the Components in a struct (map-like) that matches a tag to an array of Components.
 ``` gml
 components_by_tag;
@@ -421,10 +441,8 @@ components_by_tag;
 
 Returns: `Struct`
 
-> Note: It is highly recommended not to use this field as it is only necessary for internal behavior and can cause malfunctioning if used incorrectly.
-
 ---
-## Components by Event (Private)
+## Components by Event
 This variable stores all the Components in a 3-dimensional array to make them easily accessible by event. Specify the event_type as the first index and the event_number as the second index, and you get an array of structs containing Components and their priority in the event.
 The structs containing Component and Priority are sorted by descending priority, and use the order of attachment of the Components to sort structs with equal priority.
 ``` gml
@@ -433,5 +451,3 @@ components_by_event;
 
 Returns: `Array<Struct<Array<Struct>>>`
 `(array [event_type] -> struct [$ event_number] -> array of {component, priority})`
-
-> Note: It is highly recommended not to use this field as it is only necessary for internal behavior and can cause malfunctioning if used incorrectly.

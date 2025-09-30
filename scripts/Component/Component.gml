@@ -17,7 +17,7 @@ function Component(name, tags, events) constructor {
 	
 	#region utility methods
 	
-	/// @desc returns a pointer to the manager of the component
+	/// @desc returns the manager of the component
 	/// @returns {Struct.ComponentManager}
 	static get_manager = function(){
 		return __.manager;
@@ -96,7 +96,7 @@ function Component(name, tags, events) constructor {
 			return;
 		
 		// update the manager's internal structure
-		var tag_map = __.manager.components_by_tag;
+		var tag_map = __.manager.__.components_by_tag;
 		if(is_undefined(tag_map[$ tag]))
 			tag_map[$ tag] = [self];
 		else
@@ -121,8 +121,7 @@ function Component(name, tags, events) constructor {
 			return;
 		
 		// update the manager's internal structure
-		
-		var tag_array = __.manager.components_by_tag[$ tag];
+		var tag_array = __.manager.__.components_by_tag[$ tag];
 		if(is_undefined(tag_array) || !array_contains(tag_array, self))
 			return;
 			
@@ -163,14 +162,14 @@ function Component(name, tags, events) constructor {
 		// update the manager's internal structure
 		
 		// if the old tag array is found, remove the component from it
-		var old_tag_array = __.manager.components_by_tag[$ old_tag];
+		var old_tag_array = __.manager.__.components_by_tag[$ old_tag];
 		if(is_undefined(old_tag_array) || !array_contains(old_tag_array, self))
 			return;
 		var old_tag_array_index = array_get_index(old_tag_array, self);
 		array_swap_and_pop(old_tag_array, old_tag_array_index);
 		
 		// add the component to the new tag array
-		var tag_map = __.manager.components_by_tag;
+		var tag_map = __.manager.__.components_by_tag;
 		if(is_undefined(tag_map[$ new_tag]))
 			tag_map[$ new_tag] = [self];
 		else

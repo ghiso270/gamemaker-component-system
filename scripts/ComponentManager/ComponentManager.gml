@@ -8,13 +8,13 @@ function ComponentManager(obj, components = []) constructor {
 	/// @arg {Constant.EventType}	ev_type		type of event to perform. defaults to the current one
 	/// @arg {Constant.EventNumber} ev_num		the specific event constant or value. defaults to the current one
 	static execute = function(ev_type = event_type, ev_num = event_number){
-		if(is_paused)
+		if(__.is_paused)
 			return;
 		
-		if(array_length(components_by_event) < 1)
+		if(array_length(__.components_by_event) < 1)
 			return;
 		
-		var components_by_type = components_by_event[ev_type];
+		var components_by_type = __.components_by_event[ev_type];
 		if(is_undefined(components_by_type))
 			return;
 		
@@ -28,18 +28,24 @@ function ComponentManager(obj, components = []) constructor {
 	
 	#region utility methods
 	
+	/// @desc returns the object containing this ComponentManager
+	/// @returns {Id.Instance}
+	static get_object = function(){
+		return __.object;
+	}
+	
 	/// @desc returns whether or not a component with the specified name exists inside this manager
 	/// @arg {String} name	name of the component to check
 	/// @returns {Bool}
 	static has_component = function(name){
-		return struct_exists(components_by_name, name);
+		return struct_exists(__.components_by_name, name);
 	}
 	
 	/// @desc returns the specified component
 	/// @arg {String} name	name of the component to return
 	/// @returns {Struct.Component}
 	static get_component = function(name){
-		return components_by_name[$ name];
+		return __.components_by_name[$ name];
 	}
 		
 	/// @desc adds the specified component to memory, for execution and management
@@ -56,18 +62,18 @@ function ComponentManager(obj, components = []) constructor {
 		for(var i = 0; i < tags_num; ++i){
 			
 			// create the tag array with the component in it (if it doesn't already exist)
-			if(is_undefined(components_by_tag[$ tags[i]]))
-				components_by_tag[$ tags[i]] = [component];
+			if(is_undefined(__.components_by_tag[$ tags[i]]))
+				__.components_by_tag[$ tags[i]] = [component];
 			else
 				// add the component to the tag array
-				array_push(components_by_tag[$ tags[i]], component);
+				array_push(__.components_by_tag[$ tags[i]], component);
 		}
 		
 		// add to general array
-		array_push(components, component);
+		array_push(__.components, component);
 		
 		// add to name map
-		components_by_name[$ component.get_name()] = component;
+		__.components_by_name[$ component.get_name()] = component;
 		
 		// add to event array
 		var events = component.__.events;
@@ -78,16 +84,16 @@ function ComponentManager(obj, components = []) constructor {
 			var priority = events[i][2];
 			
 			// create the event number array if it doesn't exist already
-			if(array_length(components_by_event) <= ev_type)
-				components_by_event[ev_type] = {};
+			if(array_length(__.components_by_event) <= ev_type)
+				__.components_by_event[ev_type] = {};
 			
 			// create the event components array if it doesn't exist already
-			if(is_undefined(components_by_event[ev_type][$ ev_num]))
-				components_by_event[ev_type][$ ev_num] = [];
+			if(is_undefined(__.components_by_event[ev_type][$ ev_num]))
+				__.components_by_event[ev_type][$ ev_num] = [];
 			
 			// binary search to find the best position for the component
 			// (sorted by descending priority)
-			var arr = components_by_event[ev_type][$ ev_num];
+			var arr = __.components_by_event[ev_type][$ ev_num];
 			var low = 0;
 			var high = array_length(arr) - 1;
 			var mid = 0;
@@ -126,8 +132,8 @@ function ComponentManager(obj, components = []) constructor {
 		var comp = get_component(name);
 		
 		// delete from the general array
-		var idx = array_get_index(components, comp);
-		array_swap_and_pop(components, idx);
+		var idx = array_get_index(__.components, comp);
+		array_swap_and_pop(__.components, idx);
 		
 		// delete from the event array
 		var events = comp.__.events;
@@ -137,7 +143,7 @@ function ComponentManager(obj, components = []) constructor {
 			var ev_type = events[i][0];
 			var ev_num = events[i][1];
 			var priority = events[i][2];
-			var arr = components_by_event[ev_type][$ ev_num];
+			var arr = __.components_by_event[ev_type][$ ev_num];
 			var len = array_length(arr);
 			
 			// binary search to find the first occurrence of the correct priority
@@ -166,7 +172,7 @@ function ComponentManager(obj, components = []) constructor {
 		}
 		
 		// delete from the name map
-		struct_remove(components_by_name, name);
+		struct_remove(__.components_by_name, name);
 		
 		// detachement should happen after, to access the manager during destroy() method
 		if(to_destroy)
@@ -180,7 +186,7 @@ function ComponentManager(obj, components = []) constructor {
 		for(var i = 0; i < tags_num; ++i){
 			
 			// get the array of components with the specified tag
-			var tag_array = components_by_tag[$ tags[i]];
+			var tag_array = __.components_by_tag[$ tags[i]];
 			if(is_undefined(tag_array))
 				continue;
 			
@@ -197,9 +203,9 @@ function ComponentManager(obj, components = []) constructor {
 		
 		// return the total number of components
 		if(tag == "*")
-			return array_length(components);
+			return array_length(__.components);
 		
-		var comps = components_by_tag[$ tag];
+		var comps = __.components_by_tag[$ tag];
 		if(is_undefined(comps))
 			return -1;
 		
@@ -221,10 +227,10 @@ function ComponentManager(obj, components = []) constructor {
 		
 		// allows to access ALL components with a specific tag
 		if(tag == "*")
-			return safe ? variable_clone(components, 0) : components;
+			return safe ? variable_clone(__.components, 0) : __.components;
 		
 		// clone the components array and return it safely (if requested)
-		return safe ? variable_clone(components_by_tag[$ tag], 0) : components_by_tag[$ tag];
+		return safe ? variable_clone(__.components_by_tag[$ tag], 0) : __.components_by_tag[$ tag];
 	}
 		
 	/// @desc removes all the components (in this manager) that share the specified tag.
@@ -233,40 +239,40 @@ function ComponentManager(obj, components = []) constructor {
 	/// @arg {Bool} remove_tag	if set to true, the tag itself will be removed from the map (instead of just leaving an empty array). defaults to false
 	static tag_remove_components = function(tag, to_destroy = true, remove_tag = false){
 		if(tag == "*"){
-			var len = array_length(components);
+			var len = array_length(__.components);
 			if(to_destroy){
 				for (var i = 0; i < len; ++i)
-					components[i].destroy();
+					__.components[i].destroy();
 			}
 			
 			// separate detachment to allow communication during destroy() method
 			for (var i = 0; i < len; ++i)
-				components[i].__.manager = undefined;
+				__.components[i].__.manager = undefined;
 		
-			self.components = [];
-			self.components_by_name = {};
-			self.components_by_event = [];
+			__.components = [];
+			__.components_by_name = {};
+			__.components_by_event = [];
 			
 			if(remove_tag){
-				self.components_by_tag = {};
+				__.components_by_tag = {};
 				return;
 			}
 			
 			var clear_tag_arrays = function(key, val){
-				self.components_by_tag[$ key] = [];
+				__.components_by_tag[$ key] = [];
 			}
-			struct_foreach(self.components_by_tag, clear_tag_arrays);
+			struct_foreach(__.components_by_tag, clear_tag_arrays);
 			
 			return;
 		}
 		
 		// get the array of components
-		var comps = variable_clone(components_by_tag[$ tag], 0);
+		var comps = variable_clone(__.components_by_tag[$ tag], 0);
 		if(is_undefined(comps))
 			return;
 		
 		if(remove_tag)
-			struct_remove(components_by_tag, tag);
+			struct_remove(__.components_by_tag, tag);
 		
 		// loop through all the components to delete them
 		var len = array_length(comps);
@@ -280,7 +286,7 @@ function ComponentManager(obj, components = []) constructor {
 	static tag_foreach = function(tag, func) {
 		
 		// if the tag is "*", take all components regardless of tag
-		var comps = (tag == "*" ? components : components_by_tag[$ tag]);
+		var comps = (tag == "*" ? __.components : __.components_by_tag[$ tag]);
 		
 		// run the function on each component
 		var len = array_length(comps);
@@ -288,30 +294,37 @@ function ComponentManager(obj, components = []) constructor {
 			func(comps[i]);
 	}
 	
+	
+	/// @desc returns the current state of the manager as a boolean
+	/// @returns {Bool}
+	static is_paused = function(){
+		return __.is_paused;
+	}
+	
 	/// @desc pauses this manager, meaning the execute method will skip (starting from the next execution)
 	static pause = function() {
-		is_paused = true;
+		__.is_paused = true;
 	}
 	
 	/// @desc resumes this manager, meaning the execute method will run normally until paused again
 	static resume = function() {
-		is_paused = false;
+		__.is_paused = false;
 	}
 	
 	/// @desc terminates this manager, clearing its memory and destroying all of its components
 	static destroy = function() {
-		var len = array_length(components);
+		var len = array_length(__.components);
 		for (var i = 0; i < len; ++i)
-			components[i].destroy();
+			__.components[i].destroy();
 		
 		// separate detachment to allow communication during destroy() method
 		for (var i = 0; i < len; ++i)
-			components[i].__.manager = undefined;
+			__.components[i].__.manager = undefined;
 		
-		self.components = [];
-		self.components_by_name = {};
-		self.components_by_tag = {};
-		self.components_by_event = [];
+		__.components = [];
+		__.components_by_name = {};
+		__.components_by_tag = {};
+		__.components_by_event = [];
 	}
 	
 	/// @desc returns a multi-line string containing the components in this manager, each line structured as "N - Component", N starting from 1
@@ -322,7 +335,7 @@ function ComponentManager(obj, components = []) constructor {
 	static list_components = function(active_only = false, expand_criteria = function(component){return false}, hide_substructs = false) {
 		var out = "";
 		
-		var len = array_length(components);
+		var len = array_length(__.components);
 		var len_digits = string_length(string(len));
 		
 		var comp_num = 1;
@@ -346,7 +359,7 @@ function ComponentManager(obj, components = []) constructor {
 		for (var i = 0; i < len; ++i) {
 			
 			// skip inactives
-			if(active_only && !components[i].is_active())
+			if(active_only && !__.components[i].is_active())
 				continue;
 			
 			// write ordinal number with padding
@@ -354,7 +367,7 @@ function ComponentManager(obj, components = []) constructor {
 		    out += string_repeat(" ", len_digits - string_length(ordinal)) + ordinal + " - ";
 			
 			// write component (json or name)
-			out += expand_criteria(components[i]) ? json_stringify(components[i], false, json_filter) : components[i].get_name();
+			out += expand_criteria(__.components[i]) ? json_stringify(__.components[i], false, json_filter) : __.components[i].get_name();
 			out += "\n";
 		}
 		
@@ -365,22 +378,26 @@ function ComponentManager(obj, components = []) constructor {
 	
 	#region initialize
 	
-	// array containing all components
-	self.components = [];
+	// private
+	__ = {};
+	with(__){
+		// array containing all components
+		self.components = [];
 	
-	// map that matches a name to a component
-	self.components_by_name = {};
+		// map that matches a name to a component
+		self.components_by_name = {};
 	
-	// map that matches a tag to an array of components
-	self.components_by_tag = {};
+		// map that matches a tag to an array of components
+		self.components_by_tag = {};
 	
-	// similar to a 3-dimension array that makes each component accessible by event id.
-	// structured like this: array [event_type] -> struct[$ event_number] -> array of {component, priority}
-	self.components_by_event = [];
+		// similar to a 3-dimension array that makes each component accessible by event id.
+		// structured like this: array [event_type] -> struct[$ event_number] -> array of {component, priority}
+		self.components_by_event = [];
 	
-	self.object = obj;
+		self.object = obj;
 	
-	self.is_paused = false;
+		self.is_paused = false;
+	}
 	
 	// add each component
 	array_foreach(components, function(val, idx){add_component(val)});

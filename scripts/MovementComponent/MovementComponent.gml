@@ -44,8 +44,8 @@ function MovementComponent(name, tags, x_spd, y_spd, fix_diagonal = true, events
 	
 	/// @desc changes x and y values of the GM Object based on speed
 	static update_pos = function(){
-		manager.object.x += dx * get_dt();
-		manager.object.y += dy * get_dt();
+		manager.get_object().x += dx * get_dt();
+		manager.get_object().y += dy * get_dt();
 	}
 	
 	/// @desc sets the input source to the specified one

@@ -74,7 +74,7 @@ Returns: `N/A`
 
 ---
 ## Get Manager
-This function returns a direct reference (not a copy) the ComponentManager of this Component.
+This function returns a direct reference (not a copy) of the ComponentManager of this Component.
 ``` gml
 get_manager();
 ```
