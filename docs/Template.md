@@ -1,4 +1,4 @@
-# Description:
+# Description
 Class description.
 Methods info.
 Additional info.
@@ -6,7 +6,7 @@ Additional info.
 > Note: notes.
 
 ---
-# Dependencies:
+# Dependencies
 ## Mandatory
 - [Dependency](Template.md)
 - [Dependency](Template.md)
@@ -17,10 +17,10 @@ Additional info.
 - [Dependency](Template.md)
 
 ---
-# Methods/Functions:
+# Methods/Functions
 
 ---
-## Function Name (Read-Only/Private)
+## Function Name
 This function \[description\].
 ``` gml
 syntax
@@ -46,15 +46,15 @@ code output (optional)
 ```
 
 ---
-# Fields
+# Fields (PRIVATE)
 
 ---
-## Field Name (Read-Only/Private)
-This variable stores a reference to the GameMaker Object instance specified in the constructor.
+## Field Name
+This variable \[description\].
 ``` gml
-object;
+syntax
 ```
 
-Returns: `return type`
+Returns: `variable type`
 
-> Note: usage notes (private, read-only safety recommendations).
+> Note: usage notes.
