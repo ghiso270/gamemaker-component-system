@@ -77,15 +77,21 @@ function Component(name, tags, events) constructor {
 	/// @arg {String} tag		tag to add
 	static add_tag = function(tag){
 		
+		// empty string check
+		if(tag == ""){
+			show_debug_message("WARNING in add_tag(): empty strings \"\" aren't allowed");
+			return;
+		}
+		
 		// wildcard check
 		if(tag == "*"){
-			show_debug_message($"WARNING: The tag \"*\" is reserved and cannot be used as a tag");
+			show_debug_message($"WARNING in add_tag(): The tag \"*\" is reserved and cannot be used as a tag");
 			return;
 		}
 		
 		// exit if the tag already exists
 		if(array_contains(__.tags, tag)){
-			show_debug_message($"WARNING: the tag \"{tag}\" already exists");
+			show_debug_message($"WARNING in add_tag(): the tag \"{tag}\" already exists");
 			return;
 		}
 		
@@ -107,9 +113,15 @@ function Component(name, tags, events) constructor {
 	/// @arg {String} tag		tag to remove
 	static remove_tag = function(tag){
 		
+		// empty string check
+		if(tag == ""){
+			show_debug_message("WARNING in remove_tag(): empty strings \"\" aren't allowed");
+			return;
+		}
+		
 		// exit if the tag doesn't exist
 		if(!array_contains(__.tags, tag)){
-			show_debug_message($"WARNING: the tag \"{tag}\" doesn't exist");
+			show_debug_message($"WARNING in remove_tag(): the tag \"{tag}\" doesn't exist");
 			return;
 		}
 		
@@ -135,20 +147,26 @@ function Component(name, tags, events) constructor {
 	/// @arg {String} new_tag		name to replace the old tag with		
 	static replace_tag = function(old_tag, new_tag){
 		
+		// empty string check
+		if(old_tag == "" || new_tag == ""){
+			show_debug_message("WARNING in replace_tag(): empty strings \"\" aren't allowed. Execution aborted");
+			return;
+		}
+		
 		// wildcard check
 		if(old_tag == "*" || new_tag == "*"){
-			show_debug_message("WARNING: The tag \"*\" is reserved and cannot be used as a tag");
+			show_debug_message("WARNING in replace_tag(): The tag \"*\" is reserved and cannot be used as a tag. Execution aborted");
 			return;
 		}
 		
 		// exit if the old tag doesn't exist
 		if(!array_contains(__.tags, old_tag)){
-			show_debug_message($"WARNING: the tag \"{old_tag}\" doesn't exist");
+			show_debug_message($"WARNING in replace_tag(): the tag \"{old_tag}\" doesn't exist. Execution aborted");
 			return;
 		}
 		// exit if the new tag already exists
 		if(array_contains(__.tags, new_tag)){
-			show_debug_message($"WARNING: the tag \"{new_tag}\" already exists");
+			show_debug_message($"WARNING in replace_tag(): the tag \"{new_tag}\" already exists. Execution aborted");
 			return;
 		}
 		
@@ -185,10 +203,18 @@ function Component(name, tags, events) constructor {
 	
 	// wildcard check
 	if(array_contains(tags, "*")){
-		show_debug_message($"WARNING: The tag \"*\" is reserved and cannot be used as a tag");
+		show_debug_message($"WARNING in Component initialization: The tag \"*\" is reserved and cannot be used as a tag");
 		
 		// remove wildcard tag from the array
 		array_swap_and_pop(tags, array_get_index(tags, "*"));
+	}
+	
+	// empty string check
+	if(array_contains(tags, "")){
+		show_debug_message($"WARNING in Component initialization: empty strings \"\" aren't allowed");
+		
+		// remove empty string tag from the array
+		array_swap_and_pop(tags, array_get_index(tags, ""));
 	}
 	
 	// private
@@ -208,7 +234,7 @@ function Component(name, tags, events) constructor {
 		
 		// print out the error if the length isn't correct
 		if(len < priority_index)
-			show_debug_message($"WARNING: Component with name \"{get_name()}get_name()as incomplete event at index {i}");
+			show_debug_message($"WARNING in Component initialization: Component with name \"{get_name()}\" as incomplete event at index {i}");
 		
 		// add the default priority if the array doesn't have it
 		if(len <= priority_index)

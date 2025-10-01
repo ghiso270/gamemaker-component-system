@@ -52,7 +52,7 @@ function ComponentManager(obj, components = []) constructor {
 	/// @arg {Struct.Component} component		component to add
 	static add_component = function(component){
 		if(has_component(component.get_name())){
-			show_debug_message($"WARNING: Component named \"{component.get_name()}\" already exists");
+			show_debug_message($"WARNING in add_component(): Component named \"{component.get_name()}\" already exists");
 			return;
 		}
 		
@@ -125,7 +125,7 @@ function ComponentManager(obj, components = []) constructor {
 	static remove_component = function(name, to_destroy = true){
 		// if the component doesn't exist, don't remove it
 		if(!has_component(name)){
-			show_debug_message($"WARNING: the Component named \"{name}\" doesn't exist");
+			show_debug_message($"WARNING in remove_component(): the Component named \"{name}\" doesn't exist");
 			return;
 		}
 		
