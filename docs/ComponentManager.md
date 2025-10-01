@@ -1,11 +1,11 @@
-# Description:
-A class that holds and manages all the [Component](Component.md)s of an Object asset in GameMaker.
-The [execute()](#execute) method should be called in every event in which Components are expected to execute.
+# Description
+A class that holds and manages all the Components of an Object asset in GameMaker.
+The *execute()* method should be called in every event in which Components are expected to execute.
 Utility methods are also provided, to easily add, manage and remove Components.
-Finally, the [destroy()](#destroy) method must be used once the ComponentManager isn't necessary anymore, this will allow all of the Components to correctly terminate and ensure 100% functionality.
+Finally, the *destroy()* method must be used once the ComponentManager isn't necessary anymore, this will allow all of the Components to correctly terminate and ensure 100% functionality.
 
 ---
-# Dependencies:
+# Dependencies
 ## Mandatory
 - GameMaker Object
 - [ArraySwapAndPop](ArraySwapAndPop.md)
@@ -13,7 +13,7 @@ Finally, the [destroy()](#destroy) method must be used once the ComponentManager
 - [Component](Component.md)
 
 ---
-# Methods:
+# Methods
 
 ---
 ## Constructor
@@ -347,7 +347,7 @@ The above code resumes the manager when the game is not paused.
 
 ---
 ## Destroy
-This function executes the [destroy()](Component.md#destroy-override) method for all the Components managed, then removes all references to free memory and ensure proper cleanup.
+This function executes the *destroy()* method for all the Components managed, then removes all references to free memory and ensure proper cleanup.
 ``` gml
 destroy();
 ```

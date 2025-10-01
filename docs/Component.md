@@ -1,12 +1,12 @@
-# Description:
+# Description
 An abstract class that serves as a template for subclasses of Components.
-The [execute()](#execute-override) method is for the main behavior that gets executed during each of the specified events. Other methods are used to [activate](#activate)/[deactivate](#deactivate) the Component.
+The *execute()* method is for the main behavior that gets executed during each of the specified events. Other methods are used to *activate*/*deactivate* the Component.
 Supplementary methods or Subcomponents can be added to include more functionalities.
 
 > Note: This class only exists for inheritance. It should only be used to create custom Components.
 
 ---
-# Dependencies:
+# Dependencies
 ## Mandatory
 - [ComponentManager](ComponentManager.md)
 - [ArraySwapAndPop](ArraySwapAndPop.md)
@@ -145,7 +145,7 @@ The above code deactivates *movement_component* to avoid movement during the cut
 
 ---
 ## Activate
-This function allows the Component to [execute](#execute-override). Every Component is active by default, unless specified otherwise, so this method should be used after the [deactivate()](#deactivate) method. This method gets skipped if the component is already active.
+This function allows the Component to *execute*. Every Component is active by default, unless specified otherwise, so this method should be used after the *deactivate()* method. This method gets skipped if the component is already active.
 ``` gml
 activate();
 ```
