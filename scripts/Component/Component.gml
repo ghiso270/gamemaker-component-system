@@ -61,6 +61,10 @@ function Component(name, tags, events) constructor {
 	/// @arg {String} tag		tag to check
 	/// @returns {Bool}
 	static has_tag = function(tag){
+		// wildcard: returns true for at least 1 tag
+		if(tag == "*")
+			return array_length(__.tags) != 0;
+		
 		return array_contains(__.tags, tag);
 	}
 	

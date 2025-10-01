@@ -201,6 +201,8 @@ has_tag(tag);
 | tag      | String | The tag to search for |
 Returns: `Bool`
 
+> Note: the wildcard tag "\*" is used to check if the Component has any tag.
+
 Example:
 ``` gml
 if(!movement_component.has_tag("movement")){
