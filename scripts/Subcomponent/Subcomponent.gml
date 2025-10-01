@@ -7,22 +7,27 @@ function Subcomponent() constructor{
 	#region utility methods
 	
 	/// @desc sets the parent of this subcomponent to the specified one
-	/// @arg {Struct.Component} parent	component that will have access to this subcomponent
-	static attach = function(parent){
-		self.parent = parent;
+	/// @returns {Struct.Component}
+	static get_parent = function(){
+		return __.parent;
 	}
 	
-	/// @desc removes this subcomponent's reference to its parent
-	static detach = function(){
-		self.parent = undefined;
+	/// @desc sets the parent of this subcomponent to the specified one
+	/// @arg {Struct.Component} parent	component that will have access to this subcomponent
+	static set_parent = function(parent){
+		__.parent = parent;
 	}
 	
 	#endregion
 	
 	#region initialize
 	
-	// assigned when attached to a component
-	self.parent = undefined;
+	// private
+	__ = {};
+	with(__){
+		// assigned when attached to a component
+		self.parent = undefined;
+	}
 	
 	#endregion
 }

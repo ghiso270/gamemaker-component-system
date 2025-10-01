@@ -13,7 +13,7 @@ Supplementary methods or Subcomponents can be added to include more functionalit
 ## Recommended
 - [Subcomponent](Subcomponent.md)
 ---
-# Methods:
+# Methods
 
 ---
 ## Constructor
@@ -80,8 +80,6 @@ get_manager();
 ```
 
 Returns: `Struct.ComponentManager`
-
-> Note: The output of this function is NOT safe to edit and should be treated as read-only.
 
 Example:
 ``` gml
