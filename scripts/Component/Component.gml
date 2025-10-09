@@ -63,18 +63,17 @@ function Component(name, tags, events) constructor {
 	static has_tag = function(tag){
 		// wildcard: returns true for at least 1 tag
 		if(tag == "*")
-			return array_length(__.tags) != 0;
+			return struct_names_count(__.tags) != 0;
 		
-		return array_contains(__.tags, tag);
+		return struct_exists(__.tags, tag);
 	}
 	
 	/// @desc returns an array containing all the tags of this component
-	/// @arg {Bool} safe	ensures the returned array is safe to modify, false can be used for read-only purposes. defaults to true
 	/// @returns {Array<String>}
-	static get_tags = function(safe = true){
+	static get_tags = function(){
 		
-		// clone the tags array and return it safely (if requested)
-		return safe ? variable_clone(__.tags, 0) : __.tags;
+		// get the tags array and return it
+		return struct_get_names(__.tags);
 	}
 	
 	/// @desc allows addition of tags after creation
@@ -94,13 +93,13 @@ function Component(name, tags, events) constructor {
 		}
 		
 		// exit if the tag already exists
-		if(array_contains(__.tags, tag)){
+		if(struct_exists(__.tags, tag)){
 			show_debug_message($"WARNING in add_tag(): the tag \"{tag}\" already exists");
 			return;
 		}
 		
-		// add to local array
-		array_push(__.tags, tag);
+		// update the set of tags
+		__.tags[$ tag] = true;
 		
 		if(is_undefined(__.manager))
 			return;
@@ -124,14 +123,13 @@ function Component(name, tags, events) constructor {
 		}
 		
 		// exit if the tag doesn't exist
-		if(!array_contains(__.tags, tag)){
+		if(!struct_exists(__.tags, tag)){
 			show_debug_message($"WARNING in remove_tag(): the tag \"{tag}\" doesn't exist");
 			return;
 		}
 		
-		// remove from local array
-		var local_array_index = array_get_index(__.tags, tag);
-		array_swap_and_pop(__.tags, local_array_index);
+		// remove from the set
+		struct_remove(__.tags, tag);
 		
 		if(is_undefined(__.manager))
 			return;
@@ -164,38 +162,19 @@ function Component(name, tags, events) constructor {
 		}
 		
 		// exit if the old tag doesn't exist
-		if(!array_contains(__.tags, old_tag)){
+		if(!struct_exists(__.tags, old_tag)){
 			show_debug_message($"WARNING in replace_tag(): the tag \"{old_tag}\" doesn't exist. Execution aborted");
 			return;
 		}
 		// exit if the new tag already exists
-		if(array_contains(__.tags, new_tag)){
+		if(struct_exists(__.tags, new_tag)){
 			show_debug_message($"WARNING in replace_tag(): the tag \"{new_tag}\" already exists. Execution aborted");
 			return;
 		}
 		
-		// replace in local array
-		var local_array_index = array_get_index(__.tags, old_tag);
-		__.tags[local_array_index] = new_tag;
-		
-		if(is_undefined(__.manager))
-			return;
-		
-		// update the manager's internal structure
-		
-		// if the old tag array is found, remove the component from it
-		var old_tag_array = __.manager.__.components_by_tag[$ old_tag];
-		if(is_undefined(old_tag_array) || !array_contains(old_tag_array, self))
-			return;
-		var old_tag_array_index = array_get_index(old_tag_array, self);
-		array_swap_and_pop(old_tag_array, old_tag_array_index);
-		
-		// add the component to the new tag array
-		var tag_map = __.manager.__.components_by_tag;
-		if(is_undefined(tag_map[$ new_tag]))
-			tag_map[$ new_tag] = [self];
-		else
-			array_push(tag_map[$ new_tag], self);
+		// remove the old tag and add the new one for simplicity
+		remove_tag(old_tag);
+		add_tag(new_tag);
 	}
 	
 	#endregion
@@ -226,10 +205,12 @@ function Component(name, tags, events) constructor {
 	with(__){
 		self.is_active = true;
 		self.name = name;
-		self.tags = tags;
+		self.tags = {};
 		self.events = events;
 		self.manager = undefined;
 	}
+	
+	array_foreach(tags, function(val,i){add_tag(val)});
 	
 	var add_default_priority = function(val, i){
 		var default_priority = 1;

@@ -211,14 +211,11 @@ The above code checks if *movement_component* is tagged as "movement" and prints
 
 ---
 ## Get Tags
-This function returns an array containing all the tags of this Component. It can either return a copy (default) or the array itself (unsafe).
+This function returns an array containing all the tags of this Component.
 ``` gml
-get_tags([safe]);
+get_tags();
 ```
 
-| Argument | Type | Description                                                                                                       |
-| -------- | ---- | ----------------------------------------------------------------------------------------------------------------- |
-| \[safe\] | Bool | If true (default), the function will return a copy of the array. False should only be used for read-only purposes |
 Returns: `Array<String>`
 
 Example:
@@ -319,12 +316,12 @@ Returns: `Array<[Real,Real,Real]>`
 
 ---
 ## Tags
-This variable stores the tags for this Component.
+This variable stores the tags for this Component as a struct, since it's the closest to a set data structure. Tags are saved as keys and the value is set as 'true'
 ``` gml
 tags;
 ```
 
-Returns: `Array<String>`
+Returns: `Struct`
 
 ---
 ## Manager
