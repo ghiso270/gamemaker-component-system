@@ -1,2 +1,0 @@
-This library adopts the following standard to mark private fields and methods:
-each struct with private data will have a field named '\_\_' (double underscore), which will contain all private fields and methods. It is highly recommended not to manually edit private fields because it may cause malfunctioning, and only read them using the appropriate getter methods.

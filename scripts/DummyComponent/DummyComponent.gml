@@ -2,4 +2,4 @@
 /// @arg {String}			name				name of the component
 /// @arg {Array<String>}	tags				tags of the component ("*" is reserved, so it must not be included)
 
-function DummyComponent(name, tags) : Component(name, tags, []) constructor{}
+function DummyComponent(name, tags) : Component(name, array_push_and_return(tags, "::DummyComponent"), []) constructor{}
