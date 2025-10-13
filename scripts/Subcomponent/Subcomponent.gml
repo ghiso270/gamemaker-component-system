@@ -1,6 +1,6 @@
 /// @desc  Constructor for an abstract subcomponent class, which provides additional functions usable by a component. Subclasses should be used instead
 
-function Subcomponent() constructor{
+function Subcomponent() constructor {
 	
 	// custom methods should be added in subclasses
 	
@@ -18,6 +18,18 @@ function Subcomponent() constructor{
 		__.parent = parent;
 	}
 	
+	/// @desc returns whether or not the object is an instance of a class
+	/// @arg {String} class	name to check (must start with "::")
+	static has_class = function(class){
+		return struct_exists(__.classes, class);
+	}
+	
+	/// @desc adds a class (should be considered a PROTECTED method)
+	/// @arg {String} class	name to add (must start with "::")
+	static add_class = function(class){
+		__.classes[$ class] = true;
+	}
+	
 	#endregion
 	
 	#region initialize
@@ -27,6 +39,9 @@ function Subcomponent() constructor{
 	with(__){
 		// assigned when attached to a component
 		self.parent = undefined;
+		
+		// accounts for inheritance
+		self.classes = {};
 	}
 	
 	#endregion

@@ -4,7 +4,8 @@
 /// @param {Constant.VirtualKey,Real,String} down	input trigger (vk, ord or string) to go down. set to undefined to disable
 /// @param {Constant.VirtualKey,Real,String} right	input trigger (vk, ord or string) to go right. set to undefined to disable
 
-function MovementInputSubcomponent(up, left, down, right) : Subcomponent() constructor{
+function MovementInputSubcomponent(up, left, down, right) : Subcomponent() constructor {
+	add_class("::MovementInputSubcomponent");
 	
 	// format the variable correctly if it isn't already
 	self.up		= is_string(up)	   ? ord(up)    : up;
