@@ -107,6 +107,89 @@ show_debug_message("the Component name is " + movement_component.get_name());
 The above code prints the name of the *movement_component* variable.
 
 ---
+## Has Subcomponent
+This function returns whether or not this Component has a Subcomponent mapped to the specified class.
+``` gml
+has_subcomponent(class);
+```
+
+| Argument | Type   | Description                                                    |
+| -------- | ------ | -------------------------------------------------------------- |
+| class    | String | The class of the subcomponent to return (must start with "::") |
+Returns: `Bool`
+
+Example:
+``` gml
+if(component.has_subcomponent("::MotionLogicSubcomponent")){
+	show_debug_message("the Component doesn't use standard movement logic");
+}
+```
+The above code checks if the component has a *MotionLogicSubcomponent* and prints text if it does.
+
+---
+## Get Subcomponent
+This function returns the Subcomponent mapped to the specified class or undefined if no Subcomponent exists for the specified class.
+``` gml
+get_subcomponent(class);
+```
+
+| Argument | Type   | Description                                                    |
+| -------- | ------ | -------------------------------------------------------------- |
+| class    | String | The class of the subcomponent to return (must start with "::") |
+Returns: `Struct.Subcomponent`
+
+Example:
+``` gml
+var subcomp = component.get_subcomponent("::MovementInputSubcomponent");
+if(subcomp.press_down()){
+	show_debug_message("It's Going Down Now");
+}
+```
+The above code makes a Persona 3 Reload reference when the input subcomponent detects a down key press.
+
+---
+## Add Subcomponent
+This function adds the specified Subcomponent automatically mapped to a class, returning the class it was mapped to.
+``` gml
+add_subcomponent(subcomp);
+```
+
+| Argument | Type                | Description             |
+| -------- | ------------------- | ----------------------- |
+| subcomp  | Struct.Subcomponent | The subcomponent to add |
+Returns: `String or Undefined`
+
+Example:
+``` gml
+var input_subcomp = new MovementInputSubcomponent("W","A","S","D");
+movement_component.add_subcomponent(input_subcomp);
+```
+The above code adds *input_subcomp* as a Subcomponent of *movement_component*.
+
+---
+## Remove Subcomponent
+This function removes the specified Subcomponent from the Component.
+``` gml
+remove_subcomponent(class);
+```
+
+> Note: To know what class the subcomponent was mapped to, you can use the return value of *add_subcomponent()* at runtime or even write it manually, since it'll always be the same, even across different executions.
+
+| Argument | Type   | Description                                                    |
+| -------- | ------ | -------------------------------------------------------------- |
+| class    | String | The class of the subcomponent to remove (must start with "::") |
+Returns: `N/A`
+
+Example:
+``` gml
+var input_subcomp = new MovementInputSubcomponent("W","A","S","D");
+var class = movement_component.add_subcomponent(input_subcomp);
+
+movement_component.remove_subcomponent(class);
+```
+The above code adds *input_subcomp* as a Subcomponent of *movement_component* and then removes it.
+
+---
 ## Is Active
 This function returns the current state of the Component, being true if active and false otherwise.
 ``` gml
@@ -227,7 +310,9 @@ for(var i=0; i<len; i++){
 	show_debug_message(string(i+1) + " - " + arr[i]);
 }
 ```
-The above code prints all the tags of *movement_component* as a numbered list. The output might look something like this:
+The above code prints all the tags of *movement_component* as a numbered list.
+
+Possible output:
 ```
  1 - movement
  2 - jump
@@ -349,3 +434,12 @@ name;
 ```
 
 Returns: `String`
+
+---
+## Subcomponents
+This variable stores a set of supported Subcomponents. Each struct element has the subcomponent class as key and 'true' as value. When a Subcomponent is added, the 'true' value will be replaced with a pointer to the Subcomponent added.
+``` gml
+subcomponents;
+```
+
+Returns: `Struct`

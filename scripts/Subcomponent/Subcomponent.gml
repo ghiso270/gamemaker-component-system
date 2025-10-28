@@ -18,6 +18,11 @@ function Subcomponent() constructor {
 		__.parent = parent;
 	}
 	
+	/// @desc returns an array containing all classes of the subcomponent
+	static get_classes = function(){
+		return struct_get_names(__.classes);
+	}
+	
 	/// @desc returns whether or not the object is an instance of a class
 	/// @arg {String} class	name to check (must start with "::")
 	static has_class = function(class){
@@ -43,6 +48,8 @@ function Subcomponent() constructor {
 		// accounts for inheritance
 		self.classes = {};
 	}
+	
+	add_class("::Subcomponent");
 	
 	#endregion
 }

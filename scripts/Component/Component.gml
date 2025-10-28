@@ -29,6 +29,49 @@ function Component(name, tags, events) constructor {
 		return __.name;
 	}
 	
+	/// @desc returns true if the specified class has a subcomponent assigned, and false otherwise. 
+	/// @arg {String} class	class of the subcomponent to return (must start with "::")
+	/// @return {Bool}
+	static has_subcomponent = function(class){
+		return is_struct(__.subcomponents[$ class]);
+	}
+	
+	/// @desc returns the subcomponent matched to the specified class
+	/// @arg {String} class	class of the subcomponent to return (must start with "::")
+	/// @return {Struct.Subcomponent}
+	static get_subcomponent = function(class){
+		if(is_struct(__.subcomponents[$ class]))
+			return __.subcomponents[$ class];
+	}
+	
+	/// @desc lets you add a Subcomponent automatically matched to a class
+	/// @arg {Struct.Subcomponent} subcomp	subcomponent to add
+	/// @return {String,Undefined}
+	static add_subcomponent = function(subcomp){
+		var classes = subcomp.get_classes();
+		
+		// loop over the supported classes
+		var len = array_length(classes);
+		for(var i=0; i<len; i++){
+			var class = classes[i];
+			var is_supported = struct_exists(__.subcomponents, class);
+			
+			// choose the first match that is a class of the subcomponent
+			if(is_supported){
+				subcomp.set_parent(self);
+				__.subcomponents[$ class] = subcomp;
+				return class;
+			}
+		}
+	}
+	
+	/// @desc lets you remove a Subcomponent
+	/// @arg {String} class	class of the subcomponent to remove (must start with "::")
+	static remove_subcomponent = function(class){
+		__.subcomponents[$ class].set_parent(undefined);
+		__.subcomponents[$ class] = true;
+	}
+	
 	/// @desc returns the current state of the component as a boolean
 	/// @returns {Bool}
 	static is_active = function(){
@@ -208,6 +251,7 @@ function Component(name, tags, events) constructor {
 		self.tags = {};
 		self.events = events;
 		self.manager = undefined;
+		self.subcomponents = {}
 	}
 	
 	array_foreach(tags, function(val,i){add_tag(val)});
