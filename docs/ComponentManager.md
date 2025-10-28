@@ -385,7 +385,9 @@ if(global.debug_mode){
 	manager.list_components(,function(component){return true;}));
 }
 ```
-The above code checks if debug mode is enabled and, if so, prints the full list of components, expanding everything but hiding substructs. The output might look like this:
+The above code checks if debug mode is enabled and, if so, prints the full list of components, expanding everything but hiding substructs.
+
+Possible output:
 ```
 list of components:
 1 - {"manager":"...","is_active":true,"name":"dummy1","events":[],"tags":["a"]}

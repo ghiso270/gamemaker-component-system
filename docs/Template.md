@@ -40,7 +40,7 @@ code example
 ```
 The above code \[description\].
 
-Output:
+Output/Possible output:
 ```
 code output (optional)
 ```

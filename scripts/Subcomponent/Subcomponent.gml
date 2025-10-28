@@ -12,7 +12,7 @@ function Subcomponent() constructor {
 		return __.parent;
 	}
 	
-	/// @desc sets the parent of this subcomponent to the specified one
+	/// @desc sets the parent of this subcomponent to the specified one (should be considered a PRIVATE method)
 	/// @arg {Struct.Component} parent	component that will have access to this subcomponent
 	static set_parent = function(parent){
 		__.parent = parent;
