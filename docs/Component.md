@@ -41,13 +41,13 @@ The above code creates a Constructor for the DummyComponent class, inheriting fr
 ## Execute (Override)
 This function doesn't do anything in the Component class, but it can be implemented in subclasses. The behavior depends on the purpose of the subclass implementing it.
 ``` gml
-execute(ev_type, ev_num);
+execute([ev_type], [ev_num]);
 ```
 
-| Argument    | Type                 | Description                               |
-| ----------- | -------------------- | ----------------------------------------- |
-| \[ev_type\] | Constant.EventType   | The type of event to perform.             |
-| \[ev_num\]  | Constant.EventNumber | The constant for the of event to perform. |
+| Argument    | Type                 | Description                                                       |
+| ----------- | -------------------- | ----------------------------------------------------------------- |
+| \[ev_type\] | Constant.EventType   | The type of event to perform. defaults to the current one         |
+| \[ev_num\]  | Constant.EventNumber | The number of the event in execution. defaults to the current one |
 Returns: `N/A`
 
 Example:
@@ -248,9 +248,13 @@ This avoids removing and recreating Components, simplifying the process and impr
 This function is a backup copy of *execute()*, stored for the *activate()*/*deactivate()* methods.
 It is updated during the *deactivate()* method.
 ``` gml
-deactivated_execute();
+deactivated_execute([ev_type], [ev_num]);
 ```
 
+| Argument    | Type                 | Description                               |
+| ----------- | -------------------- | ----------------------------------------- |
+| \[ev_type\] | Constant.EventType   | The type of event to perform.             |
+| \[ev_num\]  | Constant.EventNumber | The constant for the of event to perform. |
 Returns: `N/A`
 
 > Note: This method is designed for internal behavior (as a backup copy), but it can be used to run a Component regardless of active state, which can be useful in some cases.

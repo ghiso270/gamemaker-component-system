@@ -5,9 +5,9 @@
 
 function Component(name, tags, events) constructor {
 	
-	/// @arg {Constant.EventType}	ev_type		type of the event in execution
-	/// @arg {Constant.EventNumber} ev_num		number of the event in execution
-	static execute = function(ev_type, ev_num){
+	/// @arg {Constant.EventType}	ev_type		type of the event in execution. defaults to the current one
+	/// @arg {Constant.EventNumber} ev_num		number of the event in execution. defaults to the current one
+	static execute = function(ev_type = event_type, ev_num = event_number){
 		// to implement in subclasses
 	}
 	
@@ -87,7 +87,7 @@ function Component(name, tags, events) constructor {
 		
 		// save a backup and replace the execute function with an empty one;
 		deactivated_execute = execute;
-		execute = function(ev_type, ev_num){};
+		execute = function(ev_type = event_type, ev_num = event_number){};
 	}
 	
 	/// @desc enables execute method
