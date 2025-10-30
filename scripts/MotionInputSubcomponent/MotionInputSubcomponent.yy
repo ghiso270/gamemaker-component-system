@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"MovementInputSubcomponent",
+  "%Name":"MotionInputSubcomponent",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"MovementInputSubcomponent",
+  "name":"MotionInputSubcomponent",
   "parent":{
     "name":"Subcomponents",
     "path":"folders/Component System/Subcomponents.yy",

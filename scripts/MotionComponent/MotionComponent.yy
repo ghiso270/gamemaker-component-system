@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"MovementComponent",
+  "%Name":"MotionComponent",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"MovementComponent",
+  "name":"MotionComponent",
   "parent":{
     "name":"Components",
     "path":"folders/Component System/Components.yy",

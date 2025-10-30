@@ -83,7 +83,7 @@ Returns: `Struct.ComponentManager`
 
 Example:
 ``` gml
-if(movement_component.get_manager().has_component("dummy")){
+if(motion_component.get_manager().has_component("dummy")){
 	show_debug_message("the manager has a Component named 'dummy'");
 }else{
 	show_debug_message("the manager doesn't have a Component named 'dummy'");
@@ -102,9 +102,9 @@ Returns: `String`
 
 Example:
 ``` gml
-show_debug_message("the Component name is " + movement_component.get_name());
+show_debug_message("the Component name is " + motion_component.get_name());
 ```
-The above code prints the name of the *movement_component* variable.
+The above code prints the name of the *motion_component* variable.
 
 ---
 ## Has Subcomponent
@@ -140,7 +140,7 @@ Returns: `Struct.Subcomponent`
 
 Example:
 ``` gml
-var subcomp = component.get_subcomponent("::MovementInputSubcomponent");
+var subcomp = component.get_subcomponent("::MotionInputSubcomponent");
 if(subcomp.press_down()){
 	show_debug_message("It's Going Down Now");
 }
@@ -161,10 +161,10 @@ Returns: `String or Undefined`
 
 Example:
 ``` gml
-var input_subcomp = new MovementInputSubcomponent("W","A","S","D");
-movement_component.add_subcomponent(input_subcomp);
+var input_subcomp = new MotionInputSubcomponent("W","A","S","D");
+motion_component.add_subcomponent(input_subcomp);
 ```
-The above code adds *input_subcomp* as a Subcomponent of *movement_component*.
+The above code adds *input_subcomp* as a Subcomponent of *motion_component*.
 
 ---
 ## Remove Subcomponent
@@ -182,12 +182,12 @@ Returns: `N/A`
 
 Example:
 ``` gml
-var input_subcomp = new MovementInputSubcomponent("W","A","S","D");
-var class = movement_component.add_subcomponent(input_subcomp);
+var input_subcomp = new MotionInputSubcomponent("W","A","S","D");
+var class = motion_component.add_subcomponent(input_subcomp);
 
-movement_component.remove_subcomponent(class);
+motion_component.remove_subcomponent(class);
 ```
-The above code adds *input_subcomp* as a Subcomponent of *movement_component* and then removes it.
+The above code adds *input_subcomp* as a Subcomponent of *motion_component* and then removes it.
 
 ---
 ## Is Active
@@ -200,7 +200,7 @@ Returns: `Bool`
 
 Example:
 ``` gml
-if(movement_component.is_active()){
+if(motion_component.is_active()){
 	show_debug_message("the Component is active");
 }else{
 	show_debug_message("the Component is inactive");
@@ -219,10 +219,10 @@ Returns: `N/A`
 
 Example:
 ``` gml
-movement_component.deactivate();
+motion_component.deactivate();
 play_cutscene("character standing still");
 ```
-The above code deactivates *movement_component* to avoid movement during the cutscene.
+The above code deactivates *motion_component* to avoid movement during the cutscene.
 
 ---
 ## Activate
@@ -235,11 +235,11 @@ Returns: `N/A`
 
 Example:
 ``` gml
-movement_component.deactivate();
+motion_component.deactivate();
 play_cutscene("character standing still");
-movement_component.activate();
+motion_component.activate();
 ```
-The above code deactivates *movement_component* to avoid movement during the cutscene.
+The above code deactivates *motion_component* to avoid movement during the cutscene.
 After that, the Component gets reactivated and so the character can move again.
 This avoids removing and recreating Components, simplifying the process and improving performance.
 
@@ -260,15 +260,15 @@ Example:
 // Step Event
 
 if(keyboard_check(vk_space)){
-	movement_component.deactivate();
+	motion_component.deactivate();
 }
 
-if(++frames % 5 == 0 && !movement_component.is_active){
+if(++frames % 5 == 0 && !motion_component.is_active){
 	frames %= 5;
-	movement_component.deactivated_execute();
+	motion_component.deactivated_execute();
 }
 ```
-The above code deactivates *movement_component* when space is pressed, and executes the Component once every 5 frames (instead of every frame) only if it's inactive, so that the movement slows down to 0.2x.
+The above code deactivates *motion_component* when space is pressed, and executes the Component once every 5 frames (instead of every frame) only if it's inactive, so that the movement slows down to 0.2x.
 
 ---
 ## Has Tag
@@ -286,11 +286,11 @@ Returns: `Bool`
 
 Example:
 ``` gml
-if(!movement_component.has_tag("movement")){
-	show_debug_message("the movement_component isn't tagged correctly");
+if(!motion_component.has_tag("motion")){
+	show_debug_message("the motion_component isn't tagged correctly");
 }
 ```
-The above code checks if *movement_component* is tagged as "movement" and prints a message if it isn't.
+The above code checks if *motion_component* is tagged as "motion" and prints a message if it isn't.
 
 ---
 ## Get Tags
@@ -303,18 +303,18 @@ Returns: `Array<String>`
 
 Example:
 ``` gml
-var arr = movement_component.get_tags();
+var arr = motion_component.get_tags();
 var len = array_length(arr);
 
 for(var i=0; i<len; i++){
 	show_debug_message(string(i+1) + " - " + arr[i]);
 }
 ```
-The above code prints all the tags of *movement_component* as a numbered list.
+The above code prints all the tags of *motion_component* as a numbered list.
 
 Possible output:
 ```
- 1 - movement
+ 1 - motion
  2 - jump
  3 - player-exclusive
 ```
@@ -335,11 +335,11 @@ Returns: `N/A`
 
 Example:
 ``` gml
-if(!movement_component.has_tag("movement")){
-	movement_component.add_tag("movement");
+if(!motion_component.has_tag("motion")){
+	motion_component.add_tag("motion");
 }
 ```
-The above code checks if *movement_component* is tagged as "movement" and if it isn't, the tag is added.
+The above code checks if *motion_component* is tagged as "motion" and if it isn't, the tag is added.
 
 ---
 ## Remove Tag
@@ -357,11 +357,11 @@ Returns: `N/A`
 
 Example:
 ``` gml
-if(movement_component.has_tag("movement")){
-	movement_component.remove_tag("movement");
+if(motion_component.has_tag("motion")){
+	motion_component.remove_tag("motion");
 }
 ```
-The above code checks if *movement_component* is tagged as "movement" and if it is, the tag is removed.
+The above code checks if *motion_component* is tagged as "motion" and if it is, the tag is removed.
 
 ---
 ## Replace Tag
@@ -380,11 +380,11 @@ Returns: `N/A`
 
 Example:
 ``` gml
-if(movement_component.has_tag("movement")){
-	movement_component.replace_tag("movement", "move");
+if(motion_component.has_tag("motion")){
+	motion_component.replace_tag("motion", "move");
 }
 ```
-The above code checks if *movement_component* is tagged as "movement" and if it is, the tag is replaced with "move".
+The above code checks if *motion_component* is tagged as "motion" and if it is, the tag is replaced with "move".
 
 ---
 # Fields (PRIVATE)

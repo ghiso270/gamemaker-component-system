@@ -1,9 +1,9 @@
-/// @desc subcomponent that gives custom movement logic to a MovementComponent
+/// @desc subcomponent that gives custom movement logic to a MotionComponent
 /// @param {Function} get_dx	custom logic to calculate instantaneous vertical speed, must return the dx value
 /// @param {Function} get_dy	custom logic to calculate instantaneous vertical speed, must return the dy value
 
-function MovementLogicSubcomponent(get_dx, get_dy) : Subcomponent() constructor {
-	add_class("::MovementLogicSubcomponent");
+function MotionLogicSubcomponent(get_dx, get_dy) : Subcomponent() constructor {
+	add_class("::MotionLogicSubcomponent");
 	
 	self.get_dx = get_dx;
 	self.get_dy = get_dy;

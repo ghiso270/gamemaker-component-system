@@ -1,20 +1,16 @@
 /*
-	DEPENDENCIES:
-		- MovementInputSubcomponent, for keyboard input or random input
-	
-	OPTIONAL:
-		- MovementLogicSubcomponent, for custom movement (accelerating, moving as a sine wave, following an object etc.)
-*/
 
-/// @desc Component for basic linear movement, can be fine-tuned with a MovementLogicSubcomponent. requires setting an InputComponent with the appropriate method
+// ATTENTION: dogshit component
+// TODO: refactor all this once the state machine is finished
+
+/// @desc Component for basic linear movement, can be fine-tuned with a MotionLogicSubcomponent. requires setting an InputComponent with the appropriate method
 /// @arg {String}							name				name of the component
 /// @arg {Array<String>}					tags				tags of the component ("*" is reserved, so it must not be included)
-/// @arg {Real}								x_spd				horizontal speed (in pixels), applied while receiving input
-/// @arg {Real}								y_spd				vertical speed (in pixels), applied while receiving input
-/// @arg {Bool}								fix_diagonal		if true, it will move at the the same speed even diagonally. ignored when using a MovementLogicSubcomponent. defaults to true
+/// @arg {Real}								spd					speed (in pixels), applied while receiving input
+/// @arg {Function}							normalize			function applied to the vector [dx,dy] after they are calculate. takes as input the [dx,dy] vector and returns nothing. defaults to empty function.
 /// @arg {Array<Array<Real>>}				events				list of events (+ priority) in which the component has to be executed. defaults to [[ev_step, ev_step_normal, 1]]
 
-function MovementComponent(name, tags, x_spd, y_spd, fix_diagonal = true, events = [[ev_step, ev_step_normal, 1]]) : Component(name, array_push_and_return(tags, "::MovementComponent"), events) constructor{
+function MotionComponent(name, tags, spd, normalize = function(vec){}, events = [[ev_step, ev_step_normal, 1]]) : Component(name, array_push_and_return(tags, "::MotionComponent"), events) constructor{
 	
 	/// @desc calculates and applies instant velocity
 	/// @arg {Constant.EventType}	ev_type		type of the event in execution
@@ -30,12 +26,12 @@ function MovementComponent(name, tags, x_spd, y_spd, fix_diagonal = true, events
 			dy = y_spd * input.get_vdir();
 			
 			// normalize diagonal movement
-			if(fix_diagonal && dx != 0 && dy != 0) {
+			if(fix_diagonal) {
 				
 				// equivalent to dividing by the square root
-				static sqrt2 = sqrt(2);
-				dx *= sqrt2/2;
-				dy *= sqrt2/2;
+				
+				dx *= half_sqrt2;
+				dy *= half_sqrt2;
 			}
 		}
 		
@@ -49,7 +45,7 @@ function MovementComponent(name, tags, x_spd, y_spd, fix_diagonal = true, events
 	}
 	
 	/// @desc sets the input source to the specified one
-	/// @arg {Struct.MovementInputSubcomponent}	input_src		subcomponent that handles the input
+	/// @arg {Struct.MotionInputSubcomponent}	input_src		subcomponent that handles the input
 	static set_input_src = function(input_src){
 		self.input = input_src;
 		
@@ -60,7 +56,7 @@ function MovementComponent(name, tags, x_spd, y_spd, fix_diagonal = true, events
 	}
 	
 	/// @desc allows custom movement logic through the use of a component
-	/// @arg {Struct.MovementLogicSubcomponent,undefined}	move_logic_src		subcomponent that handles custom movement (such as moving as a sine wave, following an object ecc.)
+	/// @arg {Struct.MotionLogicSubcomponent,undefined}	move_logic_src		subcomponent that handles custom movement (such as moving as a sine wave, following an object ecc.)
 	static set_move_logic_src = function(move_logic_src){
 		self.move_logic = move_logic_src;
 		
@@ -83,13 +79,9 @@ function MovementComponent(name, tags, x_spd, y_spd, fix_diagonal = true, events
 	
 	#region initialize
 	
-	// set subcomponents
-	set_input_src(new MovementInputSubcomponent(undefined,undefined,undefined,undefined));
-	set_move_logic_src(undefined);
+	self.spd = spd;
 	
-	// constants for speed
-	self.x_spd = x_spd;
-	self.y_spd = y_spd;
+	// modified when the game changes speed to freeze (0), go twice as fast (2) or twice as slow (0.5)
 	self.speed_multiplier = 1;
 	
 	// instant velocity
@@ -97,7 +89,16 @@ function MovementComponent(name, tags, x_spd, y_spd, fix_diagonal = true, events
 	self.dy = 0;
 	
 	// other parameters
-	self.fix_diagonal = fix_diagonal;
+	self.normalize = (self.normalize != true) ? normalize : function(vec){
+		if(vec[0] == 0 || vec[1] == 0)
+			return;
+		
+		// the same as dividing by the square root of 2
+		static half_sqrt2 = sqrt(2)/2;
+		vec[0]*=half_sqrt2;
+		vec[1]*=half_sqrt2;
+	}
 	
 	#endregion
 }
+*/

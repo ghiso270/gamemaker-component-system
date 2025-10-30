@@ -1,11 +1,11 @@
-/// @desc subcomponent that gives input to a MovementComponent
+/// @desc subcomponent that gives input to a MotionComponent
 /// @param {Constant.VirtualKey,Real,String} up		input trigger (vk, ord or string) to go up. set to undefined to disable
 /// @param {Constant.VirtualKey,Real,String} left	input trigger (vk, ord or string) to go left. set to undefined to disable
 /// @param {Constant.VirtualKey,Real,String} down	input trigger (vk, ord or string) to go down. set to undefined to disable
 /// @param {Constant.VirtualKey,Real,String} right	input trigger (vk, ord or string) to go right. set to undefined to disable
 
-function MovementInputSubcomponent(up, left, down, right) : Subcomponent() constructor {
-	add_class("::MovementInputSubcomponent");
+function MotionInputSubcomponent(up, left, down, right) : Subcomponent() constructor {
+	add_class("::MotionInputSubcomponent");
 	
 	// format the variable correctly if it isn't already
 	self.up		= is_string(up)	   ? ord(up)    : up;
