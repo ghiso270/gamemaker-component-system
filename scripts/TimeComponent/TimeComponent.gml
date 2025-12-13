@@ -136,13 +136,12 @@ function TimeComponent(name, tags, event = [ev_step, ev_step_normal, 1]) : Compo
 	
 	#endregion
 	
-	// private data
-	with(__){
-		
-		self.dt = delta_time * __.game_speed / 1000;
-		
+	// private
+	with(__){		
 		// speed multiplier (makes the timers go faster/slower)
 		self.game_speed = 1;
+		
+		self.dt = delta_time * __.game_speed / 1000;
 		
 		// holds a list of indexes in the array of timers that don't contain a timer, to minimize the allocation of new memory
 		self.timers = new PoolingSubcomponent();

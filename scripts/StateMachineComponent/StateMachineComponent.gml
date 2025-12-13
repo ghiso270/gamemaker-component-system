@@ -113,7 +113,7 @@ function StateMachineComponent(name, tags, debug = false, events = [[ev_step, ev
 		on_enter_new(self);
 	}
 	
-	// private data
+	// private
 	with(__){
 		self.debug = debug;
 		

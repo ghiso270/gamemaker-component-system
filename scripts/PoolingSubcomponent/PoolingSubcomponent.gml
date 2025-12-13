@@ -160,6 +160,7 @@ function PoolingSubcomponent(capacity = 0) : Subcomponent() constructor {
 		}
 	}
 	
+	// private
 	with(__){
 		reset(capacity);
 	}
