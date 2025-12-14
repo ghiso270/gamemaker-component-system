@@ -45,6 +45,12 @@ function PoolingSubcomponent(capacity = 0) : Subcomponent() constructor {
 	static count = function(){
 	    return array_length(__.full_indexes);
 	}
+	
+	/// @desc returns the capacity of this container, which counts both full and empty slots
+	/// @returns {Real}
+	static size = function(){
+	    return array_length(__.items);
+	}
 
 	/// @desc resets the Subcomponent to its original state, deleting all items
 	/// @arg {Real}	capacity	initial capacity. will be automatically expanded if necessary
