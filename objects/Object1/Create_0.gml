@@ -1,15 +1,8 @@
-var s = {a: 69};
-var a;
-var callback = function(){
-	a = 104;
-}
-s.f = callback;
+man = new ComponentManager(self);
+t = new TimeComponent("time", []);
+t.set_game_speed(3);
+chron = t.add_chronometer();
+input = new InputSubcomponent("A", t, 5000);
+man.add_component(t);
 
-show_debug_message($"##########################################")
-s.f()
-show_debug_message(self)
-show_debug_message(s)
-
-show_debug_message($"##########################################")
-
-game_end(0)
+man.execute();
