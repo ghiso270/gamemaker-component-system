@@ -49,18 +49,22 @@ function PoolingSubcomponent(capacity = 0) : Subcomponent() constructor {
 	/// @desc resets the Subcomponent to its original state, deleting all items
 	/// @arg {Real}	capacity	initial capacity. will be automatically expanded if necessary
 	static reset = function(capacity = 0){
-		self.items = array_create(capacity);
 		
-		// holds a list of indexes to empty cells in the array of items
-		// this way the subcomponent knows if there's free space or if it has to allocate new memory
-		self.free_indexes = array_create_ext(capacity, function(i){return i});
+		// private
+		with(__){
+			self.items = array_create(capacity);
 		
-		// complementary to free_indexes
-		self.full_indexes = [];
+			// holds a list of indexes to empty cells in the array of items
+			// this way the subcomponent knows if there's free space or if it has to allocate new memory
+			self.free_indexes = array_create_ext(capacity, function(i){return i});
 		
-		// lookup table that returns the location of the given ID in full_indexes (returns the index where the ID is located)
-		// this makes item removal faster
-		self.index_map = {}
+			// complementary to free_indexes
+			self.full_indexes = [];
+		
+			// lookup table that returns the location of the given ID in full_indexes (returns the index where the ID is located)
+			// this makes item removal faster
+			self.index_map = {}
+		}
 	}
 	
 	/// @desc returns the specified item from the internal structure
@@ -103,8 +107,8 @@ function PoolingSubcomponent(capacity = 0) : Subcomponent() constructor {
 		struct_remove(__.index_map, item_id)
 		
 		// update index_map entry, because an index has been swapped using array_swap_and_pop()
-		if(array_length(__.full_indexes) != 0){
-			var swapped_item_id = __.full_indexes[idx]
+		if(idx < array_length(__.full_indexes)){
+			var swapped_item_id = __.full_indexes[idx];
 			__.index_map[$ swapped_item_id] = idx;
 		}
 		
@@ -152,7 +156,7 @@ function PoolingSubcomponent(capacity = 0) : Subcomponent() constructor {
 		var len = array_length(__.full_indexes);
 		
 		// use a copy for protection against item deletion mid-loop
-		var ids; array_copy(ids, 0, __.full_indexes, 0, len);
+		var ids = []; array_copy(ids, 0, __.full_indexes, 0, len);
 		
 		for (var i = 0; i < len; ++i) {
 			var item_id = ids[i]
@@ -160,8 +164,6 @@ function PoolingSubcomponent(capacity = 0) : Subcomponent() constructor {
 		}
 	}
 	
-	// private
-	with(__){
-		reset(capacity);
-	}
+	// create private data
+	reset(capacity);
 }

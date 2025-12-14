@@ -20,7 +20,7 @@ function TimeComponent(name, tags, event = [ev_step, ev_step_normal, 1]) : Compo
 				
 				// execute its function
 				if(!is_undefined(timer.callback))
-					timer.callback();
+					timer.callback(timer.data);
 					
 				// destroy the item or disable its callback to prevent it being executed every next frame
 				if(timer.destroy)
@@ -40,7 +40,7 @@ function TimeComponent(name, tags, event = [ev_step, ev_step_normal, 1]) : Compo
 	}
 	
 	/// @desc sets the current game speed multiplier. 1 is the default value
-	static change_game_speed = function(new_speed = 1){
+	static set_game_speed = function(new_speed = 1){
 		__.game_speed = new_speed;
 	}
 	
@@ -74,7 +74,7 @@ function TimeComponent(name, tags, event = [ev_step, ev_step_normal, 1]) : Compo
 	
 	/// @desc adds a timer, returning an ID to access it later
 	/// @arg {Real}		ms			how much time to set this timer for (in milliseconds)
-	/// @arg {Function}	callback	function to execute when the timer ends
+	/// @arg {Function}	callback	function to execute when the timer ends. take 1 argument (data), which can be used to access custom timer data
 	/// @arg {Bool}		destroy		if set to true (default) the timer will be removed immediately after it ends
 	/// @returns {Real}
 	static add_timer = function(ms, callback = undefined, destroy = true){
@@ -83,6 +83,7 @@ function TimeComponent(name, tags, event = [ev_step, ev_step_normal, 1]) : Compo
 		// only set the function if correctly set as a method, otherwise leave it undefined
 		timer.callback = is_method(callback) ? callback : undefined;
 		
+		timer.data = {};
 		timer.time = ms;
 		timer.destroy = destroy;
 		
@@ -96,6 +97,12 @@ function TimeComponent(name, tags, event = [ev_step, ev_step_normal, 1]) : Compo
 		__.timers.get_item(timer_id).time = ms;
 	}
 	
+	/// @desc returns a struct containing custom timer data. any changes to this struct will be reflected on the timer's custom data
+	/// @arg {Real}		timer_id	ID of the timer to get the data for
+	static get_timer_data = function(timer_id){
+		return __.timers.get_item(timer_id).data;
+	}
+	
 	/// @desc returns the time left for the specified timer (in milliseconds)
 	/// @arg {Real}	timer_id		ID of the timer to check
 	/// @returns {Real}
@@ -105,7 +112,7 @@ function TimeComponent(name, tags, event = [ev_step, ev_step_normal, 1]) : Compo
 	
 	/// @desc removes the specified timer even if it hasn't finished, returning it
 	/// @arg {Real}	timer_id		ID of the timer to remove
-	/// @returns {Real}
+	/// @returns {Struct}
 	static remove_timer = function(timer_id){
 		return __.timers.remove_item(timer_id);
 	}
@@ -124,14 +131,28 @@ function TimeComponent(name, tags, event = [ev_step, ev_step_normal, 1]) : Compo
 	/// @arg {Real}	chronometer_id		ID of the chronometer to check
 	/// @returns {Real}
 	static check_chronometer = function(chronometer_id){
-		return __.chronometers.get_item(chronometer_id).time;
+		return __.chronometers.item_exists(chronometer_id) ?
+		__.chronometers.get_item(chronometer_id).time :
+		undefined;
 	}
 	
-	/// @desc removes the specified chronometer, returning it
-	/// @arg {Real}	chronometer_id		ID of the chronometer to remove
-	/// @returns {Real}
+	/// @desc resets the specified chronometer to 0 ms, returning the old value (in ms)
+	/// @arg {Real}	chronometer_id		ID of the chronometer to check. using an invalid ID will return undefined
+	static restart_chronometer = function(chronometer_id){
+		if(!__.chronometers.item_exists(chronometer_id))
+			return undefined;
+		var time = __.chronometers.get_item(chronometer_id).time;
+		__.chronometers.get_item(chronometer_id).time = 0;
+		return time;
+	}
+	
+	/// @desc removes the specified chronometer, returning the amount of time it has been running for
+	/// @arg {Real}	chronometer_id		ID of the chronometer to remove. using an invalid ID will return undefined
 	static remove_chronometer = function(chronometer_id){
-		return __.chronometers.remove_item(chronometer_id);
+		if(!__.chronometers.item_exists(chronometer_id))
+			return undefined;
+		var c = __.chronometers.remove_item(chronometer_id);
+		return c.time;
 	}
 	
 	#endregion
@@ -141,7 +162,7 @@ function TimeComponent(name, tags, event = [ev_step, ev_step_normal, 1]) : Compo
 		// speed multiplier (makes the timers go faster/slower)
 		self.game_speed = 1;
 		
-		self.dt = delta_time * __.game_speed / 1000;
+		self.dt = delta_time * self.game_speed / 1000;
 		
 		// holds a list of indexes in the array of timers that don't contain a timer, to minimize the allocation of new memory
 		self.timers = new PoolingSubcomponent();
