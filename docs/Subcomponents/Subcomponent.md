@@ -7,7 +7,7 @@ For this reason methods widely vary depending on the purpose of the Subcomponent
 
 ---
 # Dependencies
-## Mandatory
+## Recommended
 - [Component](Component.md)
 
 ---

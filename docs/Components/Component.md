@@ -10,6 +10,7 @@ Supplementary methods or Subcomponents can be added to include more functionalit
 ## Mandatory
 - [ComponentManager](ComponentManager.md)
 - [ArraySwapAndPop](ArraySwapAndPop.md)
+- [ArrayPushAndReturn](ArrayPushAndReturn.md)
 ## Recommended
 - [Subcomponent](Subcomponent.md)
 ---

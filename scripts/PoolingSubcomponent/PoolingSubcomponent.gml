@@ -1,5 +1,5 @@
 /// @desc Subcoponent that offers a way to contain multiple items while minimizing the allocation of new memory. Should be used when dealing with items that are frequently added/removed
-/// @arg {Real}	capacity	initial capacity. will be automatically expanded if necessary
+/// @arg {Real}	capacity	initial capacity. will be automatically expanded if necessary. defaults to 0
 
 function PoolingSubcomponent(capacity = 0) : Subcomponent() constructor {
 	add_class("::PoolingSubcomponent");
@@ -51,27 +51,6 @@ function PoolingSubcomponent(capacity = 0) : Subcomponent() constructor {
 	static size = function(){
 	    return array_length(__.items);
 	}
-
-	/// @desc resets the Subcomponent to its original state, deleting all items
-	/// @arg {Real}	capacity	initial capacity. will be automatically expanded if necessary
-	static reset = function(capacity = 0){
-		
-		// private
-		with(__){
-			self.items = array_create(capacity);
-		
-			// holds a list of indexes to empty cells in the array of items
-			// this way the subcomponent knows if there's free space or if it has to allocate new memory
-			self.free_indexes = array_create_ext(capacity, function(i){return i});
-		
-			// complementary to free_indexes
-			self.full_indexes = [];
-		
-			// lookup table that returns the location of the given ID in full_indexes (returns the index where the ID is located)
-			// this makes item removal faster
-			self.index_map = {}
-		}
-	}
 	
 	/// @desc returns the specified item from the internal structure
 	/// @arg {Real}	item_id		ID of the item to return. Using an invalid ID will return undefined
@@ -120,7 +99,21 @@ function PoolingSubcomponent(capacity = 0) : Subcomponent() constructor {
 		
 		return item;
 	}
-	
+		
+	/// @desc executes the given function for all items stored
+	/// @arg {Function}	callback	function to execute. Takes in input 2 arguments (item, id)
+	static foreach = function(callback){
+		var len = array_length(__.full_indexes);
+		
+		// use a copy for protection against item deletion mid-loop
+		var ids = []; array_copy(ids, 0, __.full_indexes, 0, len);
+		
+		for (var i = 0; i < len; ++i) {
+			var item_id = ids[i]
+			callback(__.items[item_id], item_id)
+		}
+	}
+		
 	/// @desc resizes the item container as much as possible without moving nor deleting any item, returning the new size of the container
 	/// @returns {Real}
 	static shrink = function(){
@@ -156,17 +149,24 @@ function PoolingSubcomponent(capacity = 0) : Subcomponent() constructor {
 		return new_size;
 	}
 	
-	/// @desc executes the given function for all items stored
-	/// @arg {Function}	callback	function to execute. Takes in input 2 arguments (item, id)
-	static foreach = function(callback){
-		var len = array_length(__.full_indexes);
+	/// @desc resets the Subcomponent to its original state, deleting all items
+	/// @arg {Real}	capacity	initial capacity. will be automatically expanded if necessary
+	static reset = function(capacity = 0){
 		
-		// use a copy for protection against item deletion mid-loop
-		var ids = []; array_copy(ids, 0, __.full_indexes, 0, len);
+		// private
+		with(__){
+			self.items = array_create(capacity);
 		
-		for (var i = 0; i < len; ++i) {
-			var item_id = ids[i]
-			callback(__.items[item_id], item_id)
+			// holds a list of indexes to empty cells in the array of items
+			// this way the subcomponent knows if there's free space or if it has to allocate new memory
+			self.free_indexes = array_create_ext(capacity, function(i){return i});
+		
+			// complementary to free_indexes
+			self.full_indexes = [];
+		
+			// lookup table that returns the location of the given ID in full_indexes (returns the index where the ID is located)
+			// this makes item removal faster
+			self.index_map = {}
 		}
 	}
 	
