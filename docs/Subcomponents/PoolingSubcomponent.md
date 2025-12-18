@@ -4,8 +4,9 @@ It offers basic methods to add, get, replace, remove and count items, but also m
 
 ---
 # Dependencies
-## Mandatory
+## Inheritance
 - [Subcomponent](Subcomponent.md)
+## Mandatory
 - [ArraySwapAndPop](ArraySwapAndPop.md)
 ## Recommended
 - [TimeComponent](TimeComponent.md)

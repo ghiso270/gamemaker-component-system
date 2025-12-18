@@ -7,7 +7,7 @@ The State Machine won't start executing until the *start()* method is run, which
 
 ---
 # Dependencies
-## Mandatory
+## Inheritance
 - [Component](Component.md)
 ## Recommended
 - [MotionComponent](MotionComponent.md)

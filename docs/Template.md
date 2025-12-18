@@ -7,13 +7,11 @@ Additional info.
 
 ---
 # Dependencies
+## Inheritance
+- [Dependency](Template.md)
 ## Mandatory
 - [Dependency](Template.md)
-- [Dependency](Template.md)
-- [Dependency](Template.md)
 ## Recommended
-- [Dependency](Template.md)
-- [Dependency](Template.md)
 - [Dependency](Template.md)
 
 ---
