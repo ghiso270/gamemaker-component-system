@@ -46,6 +46,7 @@
     {"id":{"name":"ComponentManager","path":"scripts/ComponentManager/ComponentManager.yy",},},
     {"id":{"name":"DummyComponent","path":"scripts/DummyComponent/DummyComponent.yy",},},
     {"id":{"name":"InputSubcomponent","path":"scripts/InputSubcomponent/InputSubcomponent.yy",},},
+    {"id":{"name":"KeyInputSubcomponent","path":"scripts/KeyInputSubcomponent/KeyInputSubcomponent.yy",},},
     {"id":{"name":"Macros","path":"scripts/Macros/Macros.yy",},},
     {"id":{"name":"MotionComponent","path":"scripts/MotionComponent/MotionComponent.yy",},},
     {"id":{"name":"MotionLogicSubcomponent","path":"scripts/MotionLogicSubcomponent/MotionLogicSubcomponent.yy",},},

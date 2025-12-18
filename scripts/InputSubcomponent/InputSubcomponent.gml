@@ -1,9 +1,8 @@
-/// @desc subcomponent that works as a keyboard input interface. Subclasses can be created to draw from other input sources, such as mice, gamepads and virtual keys
-/// @arg {Constant.VirtualKey,Real,String}	key				keyboard trigger (vk, ord or string). set to undefined to disable input
+/// @desc an abstract component class. works as a generic input interface. Subclasses should be created to use actual input sources, such as keyboards, mice, gamepads and virtual keys
 /// @arg {Struct.TimeComponent}				time_manager	a working TimeComponent to rely on for accurate time elaboration. if left undefined (default) inputs won't be buffered
-/// @arg {Real}								buffering_time	determines the amount of time (in milliseconds) an input will be buffered for. Defaults to 0 (no buffering)
+/// @arg {Real}								buffering_time	determines the amount of time (in milliseconds) inputs will be buffered for. Defaults to 0 (no buffering)
 
-function InputSubcomponent(key, time_manager = undefined, buffering_time = 0) : Subcomponent() constructor {
+function InputSubcomponent(time_manager = undefined, buffering_time = 0) : Subcomponent() constructor {
 	add_class("::InputSubcomponent");
 	
 	/// @desc performs different checks based on the 'type' given
@@ -12,18 +11,11 @@ function InputSubcomponent(key, time_manager = undefined, buffering_time = 0) : 
 	/// @returns {Bool}
 	static evaluate = function(type, buffer = false){
 		
-		// convert all input functions to methods only once to improve performance
-		static input_functions = [
-			method(undefined, keyboard_check),
-			method(undefined, keyboard_check_pressed),
-			method(undefined, keyboard_check_released)
-		];
-		
 		// choose the input evalutation function base on the 'type' given
-		var input = input_functions[type];
+		var input = __.raw_input[type];
 		
 		// check for input
-		var check = (!is_undefined(__.key) && (input(__.key)));
+		var check = input();
 		
 		// if time elaboration is disabled ignore buffers
 		if(is_undefined(__.time_manager))
@@ -57,36 +49,65 @@ function InputSubcomponent(key, time_manager = undefined, buffering_time = 0) : 
 		return check || __.buffers[type];
 	}
 	
-	/// @desc checks if the key is being held down
+	#region checks
+	
+	/// @desc this function works like raw_check, but it interacts with buffers
 	/// @arg {Bool}	buffer	If set to true (and the input is true), the function will return true for some time regardless of input. If set to false, any buffer associated with this function will be deleted. Defaults to false
 	/// @returns {Bool}
 	static check = function(buffer = false){
 		return evaluate(InputMethods.CHECK, buffer);
 	}
 	
-	/// @desc checks if the key has just been pressed
+	/// @desc this function works like raw_pressed, but it interacts with buffers
 	/// @arg {Bool}	buffer	If set to true (and the input is true), the function will return true for some time regardless of input. If set to false, any buffer associated with this function will be deleted. Defaults to false
 	/// @returns {Bool}
 	static pressed = function(buffer = false){
 		return evaluate(InputMethods.PRESSED, buffer);
 	}
 	
-	/// @desc checks if the key has just been released
+	/// @desc this function works like raw_released, but it interacts with buffers
 	/// @arg {Bool}	buffer	If set to true (and the input is true), the function will return true for some time regardless of input. If set to false, any buffer associated with this function will be deleted. Defaults to false
 	/// @returns {Bool}
 	static released = function(buffer = false){
 		return evaluate(InputMethods.RELEASED, buffer);
 	}
 	
+	#endregion
+	
+	#region raw checks
+	
+	/// @desc checks if there's input. Ignores any buffers
+	/// @returns {Bool}
+	static raw_check = function(){
+		return false;
+	}
+	
+	/// @desc checks if the input has just started. Ignores any buffers
+	/// @returns {Bool}
+	static raw_pressed = function(){
+		return false;
+	}
+	
+	/// @desc checks if the input has just stopped. Ignores any buffers
+	/// @returns {Bool}
+	static raw_released = function(){
+		return false;
+	}
+	
+	#endregion
+	
 	// private
 	with(__){
-		
-		// format the variable correctly if it isn't already
-		self.key	= is_string(key) ? ord(string_upper(key)) : key;
 	
 		// contains [check, pressed, released] buffered inputs and timer IDs
 		self.buffers = [false, false, false];
 		self.timers = [undefined, undefined, undefined];
+		
+		self.raw_input = [
+			other.raw_check,
+			other.raw_pressed,
+			other.raw_released,
+		]
 		
 		self.buffer_time = buffering_time;
 		self.time_manager = time_manager;
