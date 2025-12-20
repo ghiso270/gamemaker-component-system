@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"MotionComponent",
+  "%Name":"cmp_Motion",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"MotionComponent",
+  "name":"cmp_Motion",
   "parent":{
     "name":"Components",
     "path":"folders/Component System/Components.yy",

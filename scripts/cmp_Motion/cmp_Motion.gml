@@ -3,14 +3,14 @@
 // ATTENTION: dogshit component
 // TODO: refactor all this once the state machine is finished
 
-/// @desc Component for basic linear movement, can be fine-tuned with a MotionLogicSubcomponent. requires setting an InputComponent with the appropriate method
+/// @desc Component for basic linear movement, can be fine-tuned with a sbc_MotionLogic. requires setting an InputComponent with the appropriate method
 /// @arg {String}							name				name of the component
 /// @arg {Array<String>}					tags				tags of the component ("*" is reserved, so it must not be included)
 /// @arg {Real}								spd					speed (in pixels), applied while receiving input
 /// @arg {Function}							normalize			function applied to the vector [dx,dy] after they are calculate. takes as input the [dx,dy] vector and returns nothing. defaults to empty function.
 /// @arg {Array<Array<Real>>}				events				list of events (+ priority) in which the component has to be executed. defaults to [[ev_step, ev_step_normal, 1]]
 
-function MotionComponent(name, tags, spd, normalize = function(vec){}, events = [[ev_step, ev_step_normal, 1]]) : Component(name, array_push_and_return(tags, "::MotionComponent"), events) constructor{
+function cmp_Motion(name, tags, spd, normalize = function(vec){}, events = [[ev_step, ev_step_normal, 1]]) : Component(name, array_push_and_return(tags, "::cmp_Motion"), events) constructor{
 	
 	/// @desc calculates and applies instant velocity
 	/// @arg {Constant.EventType}	ev_type		type of the event in execution
@@ -56,7 +56,7 @@ function MotionComponent(name, tags, spd, normalize = function(vec){}, events = 
 	}
 	
 	/// @desc allows custom movement logic through the use of a component
-	/// @arg {Struct.MotionLogicSubcomponent,undefined}	move_logic_src		subcomponent that handles custom movement (such as moving as a sine wave, following an object ecc.)
+	/// @arg {Struct.sbc_MotionLogic,undefined}	move_logic_src		subcomponent that handles custom movement (such as moving as a sine wave, following an object ecc.)
 	static set_move_logic_src = function(move_logic_src){
 		self.move_logic = move_logic_src;
 		

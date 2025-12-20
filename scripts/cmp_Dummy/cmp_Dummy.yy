@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"DummyComponent",
+  "%Name":"cmp_Dummy",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"DummyComponent",
+  "name":"cmp_Dummy",
   "parent":{
     "name":"Components",
     "path":"folders/Component System/Components.yy",

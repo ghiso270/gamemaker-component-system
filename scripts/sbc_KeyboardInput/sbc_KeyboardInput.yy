@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"InputSubcomponent",
+  "%Name":"sbc_KeyboardInput",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"InputSubcomponent",
+  "name":"sbc_KeyboardInput",
   "parent":{
     "name":"Subcomponents",
     "path":"folders/Component System/Subcomponents.yy",

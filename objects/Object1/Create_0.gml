@@ -1,4 +1,4 @@
 randomize();
 
-p = new PoolingSubcomponent();
+p = new sbc_Pooling();
 ids = [];

@@ -1,8 +1,8 @@
 /// @desc Subcoponent that offers a way to contain multiple items while minimizing the allocation of new memory. Should be used when dealing with items that are frequently added/removed
 /// @arg {Real}	capacity	initial capacity. will be automatically expanded if necessary. defaults to 0
 
-function PoolingSubcomponent(capacity = 0) : Subcomponent() constructor {
-	add_class("::PoolingSubcomponent");
+function sbc_Pooling(capacity = 0) : Subcomponent() constructor {
+	add_class("::sbc_Pooling");
 	
 	/// @desc adds the specified item to the internal structure, returning the ID to access it later
 	/// @arg {Any}	item	item to add

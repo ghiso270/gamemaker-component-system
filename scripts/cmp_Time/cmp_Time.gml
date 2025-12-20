@@ -3,7 +3,7 @@
 /// @arg {Array<String>}	tags				tags of the component ("*" is reserved, so it must not be included)
 /// @arg {Array<Real>}		event				single event (including priority) in which the component has to be executed. defaults to [ev_step, ev_step_normal, 1]
 
-function TimeComponent(name, tags, event = [ev_step, ev_step_normal, 1]) : Component(name, array_push_and_return(tags, "::TimeComponent"), [event]) constructor{
+function cmp_Time(name, tags, event = [ev_step, ev_step_normal, 1]) : Component(name, array_push_and_return(tags, "::cmp_Time"), [event]) constructor{
 	
 	/// @desc updates delta time and makes time pass for all timers and chronometers
 	/// @arg {Constant.EventType}	ev_type		type of the event in execution
@@ -165,7 +165,7 @@ function TimeComponent(name, tags, event = [ev_step, ev_step_normal, 1]) : Compo
 		self.dt = delta_time * self.game_speed / 1000;
 		
 		// holds a list of indexes in the array of timers that don't contain a timer, to minimize the allocation of new memory
-		self.timers = new PoolingSubcomponent();
-		self.chronometers = new PoolingSubcomponent();
+		self.timers = new sbc_Pooling();
+		self.chronometers = new sbc_Pooling();
 	}
 }

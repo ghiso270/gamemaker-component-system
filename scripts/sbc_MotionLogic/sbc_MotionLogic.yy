@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"MotionLogicSubcomponent",
+  "%Name":"sbc_MotionLogic",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"MotionLogicSubcomponent",
+  "name":"sbc_MotionLogic",
   "parent":{
     "name":"Subcomponents",
     "path":"folders/Component System/Subcomponents.yy",

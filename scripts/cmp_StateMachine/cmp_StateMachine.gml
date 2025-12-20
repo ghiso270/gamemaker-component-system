@@ -4,7 +4,7 @@
 /// @arg {Bool}					debug				whether or not to print debug messages
 /// @arg {Array<Array<Real>>}	events				list of events (+ priority) in which the component has to be executed. defaults to [[ev_step, ev_step_normal, 1]]
 
-function StateMachineComponent(name, tags, debug = false, events = [[ev_step, ev_step_normal, 1]]) : Component(name, array_push_and_return(tags, "::StateMachineComponent"), events) constructor{
+function cmp_StateMachine(name, tags, debug = false, events = [[ev_step, ev_step_normal, 1]]) : Component(name, array_push_and_return(tags, "::cmp_StateMachine"), events) constructor{
 	
 	/// @desc update each state
 	/// @arg {Constant.EventType}	ev_type		type of the event in execution

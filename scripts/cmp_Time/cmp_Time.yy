@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"TimeComponent",
+  "%Name":"cmp_Time",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"TimeComponent",
+  "name":"cmp_Time",
   "parent":{
     "name":"Components",
     "path":"folders/Component System/Components.yy",

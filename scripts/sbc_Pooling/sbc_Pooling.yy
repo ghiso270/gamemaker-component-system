@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"PoolingSubcomponent",
+  "%Name":"sbc_Pooling",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PoolingSubcomponent",
+  "name":"sbc_Pooling",
   "parent":{
     "name":"Subcomponents",
     "path":"folders/Component System/Subcomponents.yy",

@@ -15,9 +15,9 @@ There are 3 main methods: *check*, *pressed* and *released*, which also allow in
 
 ---
 ## Constructor
-This function creates a struct of the InputSubcomponent class.
+This function creates a struct of the sbc_Input class.
 ``` gml
-new InputSubcomponent([time_manager], [buffering_time]);
+new sbc_Input([time_manager], [buffering_time]);
 ```
 
 > Note: This Constructor should not be used directly as it is an abstract class.
@@ -25,14 +25,14 @@ new InputSubcomponent([time_manager], [buffering_time]);
 
 | Argument           | Type                 | Description                                                                                                             |
 | ------------------ | -------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| \[time_manager\]   | Struct.TimeComponent | A working TimeComponent to rely on for accurate time elaboration. if left undefined (default) inputs won't be buffered. |
+| \[time_manager\]   | Struct.cmp_Time | A working cmp_Time to rely on for accurate time elaboration. if left undefined (default) inputs won't be buffered. |
 | \[buffering_time\] | Real                 | Determines the amount of time (in milliseconds) inputs will be buffered for. Defaults to 0 (no buffering).              |
 
 Example:
 ``` gml
-function MyInputSubcomponent() : InputSubcomponent() {}
+function MyInputSubcomponent() : sbc_Input() {}
 ```
-The above code creates a Constructor for a class called MyInputSubcomponent, inheriting from the InputSubcomponent constructor with default arguments, meaning there won't be any buffering.
+The above code creates a Constructor for a class called MyInputSubcomponent, inheriting from the sbc_Input constructor with default arguments, meaning there won't be any buffering.
 
 ---
 ## Raw Check (Override)
@@ -46,7 +46,7 @@ Returns: `Bool`
 
 Example:
 ``` gml
-function MyInputSubcomponent() : InputSubcomponent() {
+function MyInputSubcomponent() : sbc_Input() {
 	raw_check(){
 		return global.my_input;
 	}
@@ -66,7 +66,7 @@ Returns: `Bool`
 
 Example:
 ``` gml
-function MyInputSubcomponent() : InputSubcomponent() {
+function MyInputSubcomponent() : sbc_Input() {
 	raw_pressed(){
 		return global.my_input_just_pressed;
 	}
@@ -86,7 +86,7 @@ Returns: `Bool`
 
 Example:
 ``` gml
-function MyInputSubcomponent() : InputSubcomponent() {
+function MyInputSubcomponent() : sbc_Input() {
 	raw_released(){
 		return global.my_input_just_released;
 	}
@@ -235,4 +235,4 @@ This variable stores the value of the time_manager argument from the Constructor
 time_manager;
 ```
 
-Returns: `Struct.TimeComponent`
+Returns: `Struct.cmp_Time`

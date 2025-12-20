@@ -1,9 +1,9 @@
 /// @desc an abstract component class. works as a generic input interface. Subclasses should be created to use actual input sources, such as keyboards, mice, gamepads and virtual keys
-/// @arg {Struct.TimeComponent}				time_manager	a working TimeComponent to rely on for accurate time elaboration. if left undefined (default) inputs won't be buffered
-/// @arg {Real}								buffering_time	determines the amount of time (in milliseconds) inputs will be buffered for. Defaults to 0 (no buffering)
+/// @arg {Struct.cmp_Time}		time_manager	a working cmp_Time to rely on for accurate time elaboration. if left undefined (default) inputs won't be buffered
+/// @arg {Real}					buffering_time	determines the amount of time (in milliseconds) inputs will be buffered for. Defaults to 0 (no buffering)
 
-function InputSubcomponent(time_manager = undefined, buffering_time = 0) : Subcomponent() constructor {
-	add_class("::InputSubcomponent");
+function sbc_Input(time_manager = undefined, buffering_time = 0) : Subcomponent() constructor {
+	add_class("::sbc_Input");
 	
 	/// @desc performs different checks based on the 'type' given
 	/// @arg {Constant.InputMethods}	type	ID of the method to use (either CHECK, PRESSED or RELEASED)
@@ -101,7 +101,7 @@ function InputSubcomponent(time_manager = undefined, buffering_time = 0) : Subco
 	
 		// contains [check, pressed, released] buffered inputs and timer IDs
 		self.buffers = [false, false, false];
-		self.timers = [undefined, undefined, undefined];
+		self.timers = [-1, -1, -1];
 		
 		self.raw_input = [
 			other.raw_check,

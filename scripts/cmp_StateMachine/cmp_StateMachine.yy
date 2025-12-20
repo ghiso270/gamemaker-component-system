@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"StateMachineComponent",
+  "%Name":"cmp_StateMachine",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"StateMachineComponent",
+  "name":"cmp_StateMachine",
   "parent":{
     "name":"Components",
     "path":"folders/Component System/Components.yy",

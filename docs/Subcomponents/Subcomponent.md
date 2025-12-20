@@ -79,7 +79,7 @@ The above prints the classes of *input_subcomponent*.
 
 Possible output:
 ```
-["::Subcomponent", "::InputSubcomponent"];
+["::Subcomponent", "::sbc_Input"];
 ```
 
 ---
@@ -96,13 +96,13 @@ Returns: `Bool`
 
 Example:
 ``` gml
-if(subcomponent.has_class("::InputSubcomponent")){
+if(subcomponent.has_class("::sbc_Input")){
 	show_debug_message("the subcomponent is useful for detecting inputs");
 }else{
 	show_debug_message("the subcomponent can't detect inputs");
 }
 ```
-The above code checks if the Subcomponent is an InputSubcomponent or a subclass of it, and prints text accordingly.
+The above code checks if the Subcomponent is an sbc_Input or a subclass of it, and prints text accordingly.
 
 ---
 ## Add Class (PROTECTED)

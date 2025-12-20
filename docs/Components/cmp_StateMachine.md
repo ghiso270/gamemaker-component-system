@@ -17,9 +17,9 @@ The State Machine won't start executing until the *start()* method is run, which
 
 ---
 ## Constructor
-This function creates a struct of the StateMachineComponent class.
+This function creates a struct of the cmp_StateMachine class.
 ``` gml
-new StateMachineComponent(name, tags, [debug], [events]);
+new cmp_StateMachine(name, tags, [debug], [events]);
 ```
 
 | Argument   | Type                        | Description                                                                                                                                             |
@@ -30,9 +30,9 @@ new StateMachineComponent(name, tags, [debug], [events]);
 | \[events\] | Array\<\[Real,Real,Real\]\> | \[ \[event_type, event_number, priority\], ... \].<br>The priority defaults to 1 if it isn't found.<br>Defaults to \[ \[ev_step, ev_step_normal, 1\] \] |
 Example:
 ``` gml
-sm = new StateMachineComponent("state-machine", [], true);
+sm = new cmp_StateMachine("state-machine", [], true);
 ```
-The above code creates a StateMachineComponent called "state-machine" in debug mode, with no tags. 
+The above code creates a cmp_StateMachine called "state-machine" in debug mode, with no tags. 
 
 ---
 ## Execute
@@ -81,11 +81,11 @@ state_machine.add_state("up", {
 	with(scope){show_debug_message(timer)};
 });
 ```
-The above code defines a StateMachineComponent with 2 states, "up" and "down". They can be interchanged freely using arrow keys, but when "up" is the current state, a timer starts as 30 but goes down every frame until it reaches 0, then the state is changed to "down" again.
+The above code defines a cmp_StateMachine with 2 states, "up" and "down". They can be interchanged freely using arrow keys, but when "up" is the current state, a timer starts as 30 but goes down every frame until it reaches 0, then the state is changed to "down" again.
 
 ---
 ## Start
-This function initializes the StateMachineComponent with an initial state. 
+This function initializes the cmp_StateMachine with an initial state. 
 ``` gml
 start(init_state);
 ```
@@ -108,7 +108,7 @@ The above code starts a simple State Machine with only one state: "existing".
 
 ---
 ## Get State
-This function returns the name of the current state of the StateMachineComponent.
+This function returns the name of the current state of the cmp_StateMachine.
 ``` gml
 get_state();
 ```

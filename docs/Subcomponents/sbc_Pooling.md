@@ -9,16 +9,16 @@ It offers basic methods to add, get, replace, remove and count items, but also m
 ## Mandatory
 - [ArraySwapAndPop](ArraySwapAndPop.md)
 ## Recommended
-- [TimeComponent](TimeComponent.md)
+- [cmp_Time](cmp_Time.md)
 
 ---
 # Methods/Functions
 
 ---
 ## Constructor
-This function creates a struct of the PoolingSubcomponent class.
+This function creates a struct of the sbc_Pooling class.
 ``` gml
-new PoolingSubcomponent([capacity]);
+new sbc_Pooling([capacity]);
 ```
 
 | Argument     | Type | Description                                                                                                                                                         |
@@ -26,9 +26,9 @@ new PoolingSubcomponent([capacity]);
 | \[capacity\] | Real | The initial capacity of the container. Will be automatically expanded when necessary (e.g. when adding an item and the container has no free space). defaults to 0. |
 Example:
 ``` gml
-new PoolingSubcomponent(42);
+new sbc_Pooling(42);
 ```
-The above code creates a PoolingSubcomponent with initial capacity of 42.
+The above code creates a sbc_Pooling with initial capacity of 42.
 
 ---
 ## Add Item
@@ -44,10 +44,10 @@ Returns: `Real`
 
 Example:
 ``` gml
-var pool = new PoolingSubcomponent();
+var pool = new sbc_Pooling();
 pool.add_item("My item (this one) is a String!");
 ```
-The above code adds a string to the PoolingSubcomponent.
+The above code adds a string to the sbc_Pooling.
 
 ---
 ## Item Exists
@@ -64,7 +64,7 @@ Returns: `Bool`
 Example:
 ``` gml
 randomize();
-var pool = new PoolingSubcomponent();
+var pool = new sbc_Pooling();
 var my_id = undefined;
 if(irandom(1)==0){
 	my_id = pool.add_item("My item");
@@ -73,7 +73,7 @@ if(pool.item_exists(my_id)){
 	show_debug_message("My item exists");
 }
 ```
-The above code creates a PoolingSubcomponent, then initializes *my_id* as *undefined* and assigns a new item ID to *my_id* with a 50% chance. Then it checks if the component specified by *my_id* actually exists and prints text if it does.
+The above code creates a sbc_Pooling, then initializes *my_id* as *undefined* and assigns a new item ID to *my_id* with a 50% chance. Then it checks if the component specified by *my_id* actually exists and prints text if it does.
 
 ---
 ## Count
@@ -86,13 +86,13 @@ Returns: `Real`
 
 Example:
 ``` gml
-var pool = new PoolingSubcomponent(10);
+var pool = new sbc_Pooling(10);
 pool.add_item("First item");
 pool.add_item("Second item");
 pool.add_item("Third item");
 show_debug_message($"The item count is {pool.count()}");
 ```
-The above code creates a PoolingSubcomponent and adds 3 items. Then it prints the size.
+The above code creates a sbc_Pooling and adds 3 items. Then it prints the size.
 
 Output:
 ```
@@ -109,13 +109,13 @@ Returns: `Real`
 
 Example:
 ``` gml
-var pool = new PoolingSubcomponent(10);
+var pool = new sbc_Pooling(10);
 pool.add_item("First item");
 pool.add_item("Second item");
 pool.add_item("Third item");
 show_debug_message($"Filled: {pool.count()}/{pool.size()}");
 ```
-The above code creates a PoolingSubcomponent and adds 3 items. Then it prints the size.
+The above code creates a sbc_Pooling and adds 3 items. Then it prints the size.
 
 Output:
 ```
@@ -136,7 +136,7 @@ Returns: `Any`
 Example:
 ``` gml
 randomize();
-var pool = new PoolingSubcomponent();
+var pool = new sbc_Pooling();
 var my_id = undefined;
 if(irandom(1)==0){
 	my_id = pool.add_item("My item");
@@ -145,7 +145,7 @@ if(pool.item_exists(my_id)){
 	show_debug_message($"This is my item: '{pool.get_item(my_id)}'");
 }
 ```
-The above code creates a PoolingSubcomponent, then initializes *my_id* as *undefined* and assigns a new item ID to *my_id* with a 50% chance. Then it checks if the component specified by *my_id* actually exists and prints the item if its ID exists.
+The above code creates a sbc_Pooling, then initializes *my_id* as *undefined* and assigns a new item ID to *my_id* with a 50% chance. Then it checks if the component specified by *my_id* actually exists and prints the item if its ID exists.
 
 ---
 ## Replace Item
@@ -162,7 +162,7 @@ Returns: `Any`
 
 Example:
 ``` gml
-var pool = new PoolingSubcomponent();
+var pool = new sbc_Pooling();
 var id1 = pool.add_item("X");
 var id2 = pool.add_item("Y");
 var id3 = pool.add_item("Z");
@@ -184,10 +184,10 @@ Returns: `Any`
 
 Example:
 ``` gml
-var pool = new PoolingSubcomponent();
+var pool = new sbc_Pooling();
 pool.add_item("My item (this one) is a String!");
 ```
-The above code adds a string to the PoolingSubcomponent.
+The above code adds a string to the sbc_Pooling.
 
 ---
 ## Foreach
@@ -205,7 +205,7 @@ Returns: `N/A`
 
 Example:
 ``` gml
-var langs = new PoolingSubcomponent();
+var langs = new sbc_Pooling();
 global.phrase = "Examples of programming languages:";
 langs.add_item("C++");
 langs.add_item("Python");
@@ -215,7 +215,7 @@ langs.foreach(function(item, item_id){
 });
 show_debug_message(global.phrase);
 ```
-The above code adds names of programming languages to a PoolingSubcomponent, then it executes a function to add all of their names to a global string, then it prints that string.
+The above code adds names of programming languages to a sbc_Pooling, then it executes a function to add all of their names to a global string, then it prints that string.
 
 Output:
 ```
@@ -237,7 +237,7 @@ Returns: `N/A`
 
 Example:
 ``` gml
-var langs = new PoolingSubcomponent();
+var langs = new sbc_Pooling();
 global.phrase = "Examples of programming languages:";
 var id1 = langs.add_item("C++");
 var id2 = langs.add_item("Python");
@@ -262,7 +262,7 @@ This function resets the container to its original state, removing all items.
 reset([capacity]);
 ```
 
-> Note: using this function is similar to creating a new PoolingSubcomponent using the constructor, with the exception that the constructor would allocate new memory and use a different memory address for the new PoolingSubcomponent.
+> Note: using this function is similar to creating a new sbc_Pooling using the constructor, with the exception that the constructor would allocate new memory and use a different memory address for the new sbc_Pooling.
 
 | Argument     | Type | Description                                                                                                                                                 |
 | ------------ | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -271,7 +271,7 @@ Returns: `N/A`
 
 Example:
 ``` gml
-var langs = new PoolingSubcomponent();
+var langs = new sbc_Pooling();
 global.phrase = "Examples of programming languages:";
 var id1 = langs.add_item("C++");
 var id2 = langs.add_item("Python");
