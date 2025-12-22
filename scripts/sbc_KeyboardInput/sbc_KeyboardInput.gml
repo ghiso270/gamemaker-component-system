@@ -9,19 +9,19 @@ function sbc_KeyboardInput(key, time_manager = undefined, buffering_time = 0) : 
 	/// @desc checks if the key is held down. Ignores any buffers
 	/// @returns {Bool}
 	static raw_check = function(){
-		return keyboard_check(key);
+		return keyboard_check(__.key);
 	}
 	
 	/// @desc checks if the key has just been pressed. Ignores any buffers
 	/// @returns {Bool}
 	static raw_pressed = function(){
-		return keyboard_check_pressed(key);
+		return keyboard_check_pressed(__.key);
 	}
 	
 	/// @desc checks if the key has just been released. Ignores any buffers
 	/// @returns {Bool}
 	static raw_released = function(){
-		return keyboard_check_released(key);
+		return keyboard_check_released(__.key);
 	}
 	
 	// private
